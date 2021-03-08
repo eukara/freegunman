@@ -1,4 +1,4 @@
-# FreeSci
+# FreeGunman
 Clean-room reimplementation of Gunman Chronicles in QuakeC.
 
 ![Preview 1](img/preview1.jpg)
