@@ -20,7 +20,6 @@
 ../shared/include.src
 
 decore.qc
-../../../valve/src/client/predict.qc
 init.qc
 ../../../valve/src/client/player.qc
 entities.qc
@@ -31,7 +30,6 @@ entities.qc
 hud.qc
 hud_weaponselect.qc
 ../../../valve/src/client/scoreboard.qc
-../../../valve/src/client/input.qc
 ../../../base/src/client/modelevent.qc
 
 ../../../src/client/include.src

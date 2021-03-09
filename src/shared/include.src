@@ -27,4 +27,5 @@ w_minigun.qc
 w_aicore.qc
 weapons.qc
 ../../../valve/src/shared/weapon_common.qc
+input.qc
 #endlist

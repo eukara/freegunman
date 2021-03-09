@@ -17,16 +17,7 @@
 void
 Game_Input(void)
 {
-	if (input_buttons & INPUT_BUTTON0) {
-		Weapons_Primary();
-	} else if (input_buttons & INPUT_BUTTON4) {
-		Weapons_Reload();
-	} else if (input_buttons & INPUT_BUTTON3) {
-		Weapons_Secondary();
-	} else {
-		Weapons_Release();
-	}
-
+#ifdef SERVER
 	if (input_buttons & INPUT_BUTTON5) {
 		Player_UseDown(); 
 	} else {
@@ -64,4 +55,15 @@ Game_Input(void)
 	}
 
 	self.impulse = 0;
+#endif
+
+	if (input_buttons & INPUT_BUTTON0) {
+		Weapons_Primary();
+	} else if (input_buttons & INPUT_BUTTON4) {
+		Weapons_Reload();
+	} else if (input_buttons & INPUT_BUTTON3) {
+		Weapons_Secondary();
+	} else {
+		Weapons_Release();
+	}
 }
