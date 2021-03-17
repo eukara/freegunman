@@ -20,6 +20,7 @@
 ../shared/include.src
 
 decore.qc
+../../../base/src/client/draw.qc
 init.qc
 ../../../valve/src/client/player.qc
 entities.qc
