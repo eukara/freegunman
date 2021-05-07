@@ -114,7 +114,6 @@ HLGameRules::LevelNewParms(void)
 void
 HLGameRules::PlayerPostFrame(base_player pp)
 {
-	Animation_PlayerUpdate();
 }
 
 void
