@@ -19,7 +19,8 @@ class monster_human_unarmed:CBaseNPC
 	void(void) monster_human_unarmed;
 };
 
-void monster_human_unarmed::monster_human_unarmed(void)
+void
+monster_human_unarmed::monster_human_unarmed(void)
 {
 	model = "models/gunmantrooper.mdl";
 	base_mins = [-16,-16,0];

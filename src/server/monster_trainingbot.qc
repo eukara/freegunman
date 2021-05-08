@@ -19,7 +19,8 @@ class monster_trainingbot:CBaseNPC
 	void(void) monster_trainingbot;
 };
 
-void monster_trainingbot::monster_trainingbot(void)
+void
+monster_trainingbot::monster_trainingbot(void)
 {
 	model = "models/gunmantrooper.mdl";
 	base_mins = [-16,-16,0];

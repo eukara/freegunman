@@ -20,7 +20,8 @@ class CBaseDecor:CBaseEntity
 	virtual void(string, string) SpawnKey;
 };
 
-void CBaseDecor::Initialized(void)
+void
+CBaseDecor::Initialized(void)
 {
 	setmodel(this, model);
 	setorigin(this, origin);
@@ -28,7 +29,8 @@ void CBaseDecor::Initialized(void)
 	drawmask = MASK_ENGINE;
 }
 
-void CBaseDecor::SpawnKey(string strField, string strKey)
+void
+CBaseDecor::SpawnKey(string strField, string strKey)
 {
 	switch (strField) {
 		case "body":

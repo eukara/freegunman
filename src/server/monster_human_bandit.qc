@@ -19,7 +19,8 @@ class monster_human_bandit:CBaseNPC
 	void(void) monster_human_bandit;
 };
 
-void monster_human_bandit::monster_human_bandit(void)
+void
+monster_human_bandit::monster_human_bandit(void)
 {
 	model = "models/bandit.mdl";
 	base_mins = [-16,-16,0];

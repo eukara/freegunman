@@ -19,7 +19,8 @@ class monster_human_demoman:CBaseNPC
 	void(void) monster_human_demoman;
 };
 
-void monster_human_demoman::monster_human_demoman(void)
+void
+monster_human_demoman::monster_human_demoman(void)
 {
 	model = "models/demolitionman.mdl";
 	base_mins = [-16,-16,0];

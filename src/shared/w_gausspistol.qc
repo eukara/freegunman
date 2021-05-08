@@ -419,7 +419,8 @@ w_gausspistol_hudback(player pl)
 	return FALSE;
 }
 #else
-void CSEv_w_gp_setmode_i(int f)
+void
+CSEv_w_gp_setmode_i(int f)
 {
 	player pl = (player)self;
 	pl.a_ammo3 = f;
