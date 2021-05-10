@@ -42,7 +42,7 @@ gamerules_multiplayer.qc
 
 ../../../valve/src/server/client.qc
 ../../../valve/src/server/server.qc
-../../../valve/src/server/damage.qc
+../../../base/src/server/damage.qc
 ../../../valve/src/server/rules.qc
 ../../../valve/src/server/flashlight.qc
 ../../../base/src/server/modelevent.qc
