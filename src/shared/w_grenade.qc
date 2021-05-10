@@ -139,7 +139,7 @@ w_grenade_deathmsg(void)
 float
 w_grenade_aimanim(void)
 {
-	return 0;
+	return (0);
 }
 
 void
@@ -253,7 +253,7 @@ int
 w_grenade_hudforward(player pl)
 {
 	if (pl.a_ammo1 <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	switch (pl.a_ammo1) {
@@ -264,14 +264,14 @@ w_grenade_hudforward(player pl)
 		sendevent("w_gren_pay", "i", 1i);
 		break;
 	}
-	return FALSE;
+	return (0);
 }
 
 int
 w_grenade_hudback(player pl)
 {
 	if (pl.a_ammo1 <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	switch (pl.a_ammo1) {
@@ -282,7 +282,7 @@ w_grenade_hudback(player pl)
 		sendevent("w_gren_pay", "i", -1i);
 		break;
 	}
-	return FALSE;
+	return (0);
 }
 #else
 void

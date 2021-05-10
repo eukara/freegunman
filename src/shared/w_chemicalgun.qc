@@ -133,7 +133,7 @@ w_chemicalgun_deathmsg(void)
 float
 w_chemicalgun_aimanim(void)
 {
-	return 0;
+	return (0);
 }
 
 int
@@ -152,10 +152,10 @@ w_chemicalgun_pickup(int new, int startammo)
 	if (pl.ammo_chem < 50) {
 		pl.ammo_chem = bound(0, pl.ammo_chem + 10, 50);
 	} else {
-		return FALSE;
+		return (0);
 	}
 #endif
-	return TRUE;
+	return (1);
 }
 
 #ifdef CLIENT
@@ -391,7 +391,7 @@ int
 w_chemgun_hudforward(player pl)
 {
 	if (pl.a_ammo1 <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	switch (pl.a_ammo1) {
@@ -408,14 +408,14 @@ w_chemgun_hudforward(player pl)
 		sendevent("w_chem_p", "i", 1i);
 		break;
 	}
-	return FALSE;
+	return (0);
 }
 
 int
 w_chemgun_hudback(player pl)
 {
 	if (pl.a_ammo1 <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	switch (pl.a_ammo1) {
@@ -432,7 +432,7 @@ w_chemgun_hudback(player pl)
 		sendevent("w_chem_p", "i", -1i);
 		break;
 	}
-	return FALSE;
+	return (0);
 }
 #else
 void

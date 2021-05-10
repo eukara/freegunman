@@ -95,7 +95,7 @@ w_aicore_deathmsg(void)
 float
 w_aicore_aimanim(void)
 {
-	return 0;
+	return (0);
 }
 
 void

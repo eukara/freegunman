@@ -218,7 +218,7 @@ w_dml_deathmsg(void)
 float
 w_dml_aimanim(void)
 {
-	return 0;
+	return (0);
 }
 
 int
@@ -230,10 +230,10 @@ w_dml_pickup(int new, int startammo)
 	if (pl.ammo_rocket < 100) {
 		pl.ammo_rocket = bound(0, pl.ammo_rocket + 2, 100);
 	} else {
-		return FALSE;
+		return (0);
 	}
 #endif
-	return TRUE;
+	return (1);
 }
 
 void
@@ -411,7 +411,7 @@ int
 w_dml_hudforward(player pl)
 {
 	if (pl.menu_active <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	switch (pl.menu_active) {
@@ -428,13 +428,13 @@ w_dml_hudforward(player pl)
 		sendevent("w_dml_pay", "i", 1i);
 		break;
 	}
-	return FALSE;
+	return (0);
 }
 int
 w_dml_hudback(player pl)
 {
 	if (pl.menu_active <= 0) {
-		return TRUE;
+		return (1);
 	}
 	
 	switch (pl.menu_active) {
@@ -451,7 +451,7 @@ w_dml_hudback(player pl)
 		sendevent("w_dml_pay", "i", -1i);
 		break;
 	}
-	return FALSE;
+	return (0);
 }
 #else
 void

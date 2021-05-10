@@ -121,11 +121,11 @@ HUD_InSlotPos(int slot, int pos)
 			if (pl.g_items & g_weapons[i].id) {
 				return i;
 			} else {
-				return -1;
+				return (-1);
 			}
 		}
 	}
-	return -1;
+	return (-1);
 }
 
 void

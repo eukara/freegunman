@@ -168,7 +168,7 @@ w_minigun_deathmsg(void)
 float
 w_minigun_aimanim(void)
 {
-	return 0;
+	return (0);
 }
 
 int
@@ -180,10 +180,10 @@ w_minigun_pickup(int new, int startammo)
 	if (pl.ammo_minigun < 100) {
 		pl.ammo_minigun = bound(0, pl.ammo_minigun + 30, 100);
 	} else {
-		return FALSE;
+		return (0);
 	}
 #endif
-	return TRUE;
+	return (1);
 }
 
 void

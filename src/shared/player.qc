@@ -45,41 +45,40 @@ enumflags
 noref int input_sequence;
 class player:base_player
 {
-	/* Weapon specific */
-	int ammo_battery; int ammo_battery_net; // beamgun
-	int ammo_chem; int ammo_chem_net; // chemicalgun
-	int ammo_rocket; int ammo_rocket_net; // dml / grenades
-	int ammo_gauss; int ammo_gauss_net; // gauspistol
-	int ammo_minigun; int ammo_minigun_net; // minigun
-	int ammo_buckshot; int ammo_buckshot_net; // shotgun
-	int fist_mode; int fist_mode_net; // knife/fists
-	int gauss_mode; int gauss_mode_net;
-	int shotgun_shells; int shotgun_shells_net;
-	int shotgun_spread; int shotgun_spread_net;
+	PREDICTED_INT(anim_top);
+	PREDICTED_FLOAT(anim_top_time);
+	PREDICTED_FLOAT(anim_top_delay);
+	PREDICTED_INT(anim_bottom);
+	PREDICTED_FLOAT(anim_bottom_time);
+
+	PREDICTED_INT(ammo_battery); /* beamgun */
+	PREDICTED_INT(ammo_chem); /* chemicalgun */
+	PREDICTED_INT(ammo_rocket); /* dml / grenades */
+	PREDICTED_INT(ammo_gauss); /* gauspistol */
+	PREDICTED_INT(ammo_minigun); /* minigun */
+	PREDICTED_INT(ammo_buckshot); /* shotgun */
+	PREDICTED_INT(fist_mode); /* knife/fists */
+	PREDICTED_INT(gauss_mode);
+	PREDICTED_INT(shotgun_shells);
+	PREDICTED_INT(shotgun_spread);
 	
-	int dml_launch; int dml_launch_net; /* when fired, when targeted */
-	int dml_flightpath; int dml_flightpath_net; /* guided, homing, spiral */
-	int dml_detonate; int dml_detonate_net; /* on impact, in proximity, timed, when tripped */
-	int dml_payload; int dml_payload_net; /* explosive, cluster */
-	int chem_acid; int chem_acid_net;
-	int chem_neutral; int chem_neutral_net;
-	int chem_base; int chem_base_net;
-	int chem_pressure; int chem_pressure_net;
+	PREDICTED_INT(dml_launch); /* when fired, when targeted */
+	PREDICTED_INT(dml_flightpath); /* guided, homing, spiral */
+	PREDICTED_INT(dml_detonate); /* on impact, in proximity, timed, when tripped */
+	PREDICTED_INT(dml_payload); /* explosive, cluster */
+	PREDICTED_INT(chem_acid);
+	PREDICTED_INT(chem_neutral);
+	PREDICTED_INT(chem_base);
+	PREDICTED_INT(chem_pressure);
 
-	int beam_range; int beam_range_net; /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
-	int beam_poweracc; int beam_poweracc_net; /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
-	int beam_lightning; int beam_lightning_net; /* BEAM, CHAIN, BALL */
-	int gren_detonate; int gren_detonate_net; /* when tripped (tripmine), timed, on impact */
-	int gren_payload; int gren_payload_net; /* cluster, explosive */
+	PREDICTED_INT(beam_range); /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
+	PREDICTED_INT(beam_poweracc); /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
+	PREDICTED_INT(beam_lightning); /* BEAM, CHAIN, BALL */
+	PREDICTED_INT(gren_detonate); /* when tripped (tripmine), timed, on impact */
+	PREDICTED_INT(gren_payload); /* cluster, explosive */
 
-	int menu_active; int menu_active_net;
-	int dml_state; int dml_state_net;
-
-	float anim_top; float anim_top_net;
-	float anim_top_time; float anim_top_time_net;
-	float anim_top_delay; float anim_top_delay_net;
-	float anim_bottom; float anim_bottom_net;
-	float anim_bottom_time; float anim_bottom_time_net;
+	PREDICTED_INT(menu_active);
+	PREDICTED_INT(dml_state);
 
 #ifdef CLIENT
 	/* External model */
@@ -176,39 +175,40 @@ player::PredictPreFrame(void)
 {
 	base_player::PredictPreFrame();
 
-	ammo_battery_net = ammo_battery; // beamgun
-	ammo_chem_net = ammo_chem; // chemicalgun
-	ammo_rocket_net = ammo_rocket; // dml / grenades
-	ammo_gauss_net = ammo_gauss; // gauspistol
-	ammo_minigun_net = ammo_minigun; // minigun
-	ammo_buckshot_net = ammo_buckshot; // shotgun
-	fist_mode_net = fist_mode; // knife/fists
-	gauss_mode_net = gauss_mode;
-	shotgun_shells_net = shotgun_shells;
-	shotgun_spread_net = shotgun_spread;
-	
-	dml_launch_net = dml_launch; /* when fired, when targeted */
-	dml_flightpath_net = dml_flightpath; /* guided, homing, spiral */
-	dml_detonate_net = dml_detonate; /* on impact, in proximity, timed, when tripped */
-	dml_payload_net = dml_payload; /* explosive, cluster */
-	chem_acid_net = chem_acid;
-	chem_neutral_net = chem_neutral;
-	chem_base_net = chem_base;
-	chem_pressure_net = chem_pressure;
+	SAVE_STATE(anim_top);
+	SAVE_STATE(anim_top_time);
+	SAVE_STATE(anim_top_delay);
+	SAVE_STATE(anim_bottom);
+	SAVE_STATE(anim_bottom_time);
 
-	beam_range_net = beam_range; /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
-	beam_poweracc_net = beam_poweracc; /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
-	beam_lightning_net = beam_lightning; /* BEAM, CHAIN, BALL */
-	gren_detonate_net = gren_detonate; /* when tripped (tripmine), timed, on impact */
-	gren_payload_net = gren_payload; /* cluster, explosive */
-	menu_active_net = menu_active;
-	dml_state_net = dml_state;
+	SAVE_STATE(ammo_battery);
+	SAVE_STATE(ammo_chem);
+	SAVE_STATE(ammo_rocket);
+	SAVE_STATE(ammo_gauss);
+	SAVE_STATE(ammo_minigun);
+	SAVE_STATE(ammo_buckshot);
+	SAVE_STATE(fist_mode);
+	SAVE_STATE(gauss_mode);
+	SAVE_STATE(shotgun_shells);
+	SAVE_STATE(shotgun_spread);
 
-	anim_top_net = anim_top;
-	anim_top_delay_net = anim_top_delay;
-	anim_top_time_net = anim_top_time;
-	anim_bottom_net = anim_bottom;
-	anim_bottom_time_net = anim_bottom_time;
+	SAVE_STATE(dml_launch);
+	SAVE_STATE(dml_flightpath);
+	SAVE_STATE(dml_detonate);
+	SAVE_STATE(dml_payload);
+	SAVE_STATE(chem_acid);
+	SAVE_STATE(chem_neutral);
+	SAVE_STATE(chem_base);
+	SAVE_STATE(chem_pressure);
+
+	SAVE_STATE(beam_range);
+	SAVE_STATE(beam_poweracc);
+	SAVE_STATE(beam_lightning);
+	SAVE_STATE(gren_detonate);
+	SAVE_STATE(gren_payload);
+
+	SAVE_STATE(menu_active);
+	SAVE_STATE(dml_state);
 }
 
 /*
@@ -223,38 +223,40 @@ player::PredictPostFrame(void)
 {
 	base_player::PredictPostFrame();
 
-	ammo_battery = ammo_battery_net; // beamgun
-	ammo_chem = ammo_chem_net; // chemicalgun
-	ammo_rocket = ammo_rocket_net; // dml / grenades
-	ammo_gauss = ammo_gauss_net; // gauspistol
-	ammo_minigun = ammo_minigun_net; // minigun
-	ammo_buckshot = ammo_buckshot_net; // shotgun
-	fist_mode = fist_mode_net; // knife/fists
-	gauss_mode = gauss_mode_net;
-	shotgun_shells = shotgun_shells_net;
-	shotgun_spread = shotgun_spread_net;
-	
-	dml_launch = dml_launch_net; /* when fired, when targeted */
-	dml_flightpath = dml_flightpath_net; /* guided, homing, spiral */
-	dml_detonate = dml_detonate_net; /* on impact, in proximity, timed, when tripped */
-	dml_payload = dml_payload_net; /* explosive, cluster */
-	chem_acid = chem_acid_net;
-	chem_neutral = chem_neutral_net;
-	chem_base = chem_base_net;
-	chem_pressure = chem_pressure_net;
+	ROLL_BACK(anim_top);
+	ROLL_BACK(anim_top_time);
+	ROLL_BACK(anim_top_delay);
+	ROLL_BACK(anim_bottom);
+	ROLL_BACK(anim_bottom_time);
 
-	beam_range = beam_range_net; /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
-	beam_poweracc = beam_poweracc_net; /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
-	beam_lightning = beam_lightning_net; /* BEAM, CHAIN, BALL */
-	gren_detonate = gren_detonate_net; /* when tripped (tripmine), timed, on impact */
-	gren_payload = gren_payload_net; /* cluster, explosive */
-	menu_active = menu_active_net;
+	ROLL_BACK(ammo_battery);
+	ROLL_BACK(ammo_chem);
+	ROLL_BACK(ammo_rocket);
+	ROLL_BACK(ammo_gauss);
+	ROLL_BACK(ammo_minigun);
+	ROLL_BACK(ammo_buckshot);
+	ROLL_BACK(fist_mode);
+	ROLL_BACK(gauss_mode);
+	ROLL_BACK(shotgun_shells);
+	ROLL_BACK(shotgun_spread);
 
-	anim_top = anim_top_net;
-	anim_top_delay = anim_top_delay_net;
-	anim_top_time = anim_top_time_net;
-	anim_bottom = anim_bottom_net;
-	anim_bottom_time = anim_bottom_time_net;
+	ROLL_BACK(dml_launch);
+	ROLL_BACK(dml_flightpath);
+	ROLL_BACK(dml_detonate);
+	ROLL_BACK(dml_payload);
+	ROLL_BACK(chem_acid);
+	ROLL_BACK(chem_neutral);
+	ROLL_BACK(chem_base);
+	ROLL_BACK(chem_pressure);
+
+	ROLL_BACK(beam_range);
+	ROLL_BACK(beam_poweracc);
+	ROLL_BACK(beam_lightning);
+	ROLL_BACK(gren_detonate);
+	ROLL_BACK(gren_payload);
+
+	ROLL_BACK(menu_active);
+	ROLL_BACK(dml_state);
 }
 
 #else
@@ -264,98 +266,99 @@ player::EvaluateEntity(void)
 	base_player::EvaluateEntity();
 
 	/* animation */
-	if (anim_bottom_net != anim_bottom || anim_bottom_time != anim_bottom_time_net)
+	if (ATTR_CHANGED(anim_bottom) || ATTR_CHANGED(anim_bottom_time))
 		SendFlags |= PLAYER_BOTTOMFRAME;
-	if (anim_top_net != anim_top || anim_top_time != anim_top_time_net || anim_top_delay != anim_top_delay_net)
+	if (ATTR_CHANGED(anim_top) || ATTR_CHANGED(anim_top_time) || ATTR_CHANGED(anim_top_delay))
 		SendFlags |= PLAYER_TOPFRAME;
 
-	anim_top_net = anim_top;
-	anim_top_delay_net = anim_top_delay;
-	anim_top_time_net = anim_top_time;
-	anim_bottom_net = anim_bottom;
-	anim_bottom_time_net = anim_bottom_time;
-
 	/* ammo 1 type updates */
- 	if (ammo_battery_net == ammo_battery)
+	if (ATTR_CHANGED(ammo_battery))
 		SendFlags |= PLAYER_AMMO1;
- 	if (ammo_chem_net == ammo_chem)
+	if (ATTR_CHANGED(ammo_chem))
 		SendFlags |= PLAYER_AMMO1;
- 	if (ammo_rocket_net == ammo_rocket)
+	if (ATTR_CHANGED(ammo_rocket))
 		SendFlags |= PLAYER_AMMO1;
- 	if (ammo_gauss_net == ammo_gauss)
+	if (ATTR_CHANGED(ammo_gauss))
 		SendFlags |= PLAYER_AMMO1;
- 	if (ammo_minigun_net == ammo_minigun)
+	if (ATTR_CHANGED(ammo_minigun))
 		SendFlags |= PLAYER_AMMO1;
- 	if (ammo_buckshot_net == ammo_buckshot)
+	if (ATTR_CHANGED(ammo_buckshot))
 		SendFlags |= PLAYER_AMMO1;
- 	if (fist_mode_net == fist_mode)
+	if (ATTR_CHANGED(fist_mode))
 		SendFlags |= PLAYER_AMMO1;
- 	if (gauss_mode_net == gauss_mode)
+	if (ATTR_CHANGED(gauss_mode))
 		SendFlags |= PLAYER_AMMO1;
- 	if (shotgun_shells_net == shotgun_shells)
+	if (ATTR_CHANGED(shotgun_shells))
 		SendFlags |= PLAYER_AMMO1;
- 	if (shotgun_spread_net == shotgun_spread)
+	if (ATTR_CHANGED(shotgun_spread))
 		SendFlags |= PLAYER_AMMO1;
 
- 	if (dml_launch_net == dml_launch)
+	if (ATTR_CHANGED(dml_launch))
 		SendFlags |= PLAYER_AMMO2;
- 	if (dml_flightpath_net == dml_flightpath)
+	if (ATTR_CHANGED(dml_flightpath))
 		SendFlags |= PLAYER_AMMO2;
- 	if (dml_detonate_net == dml_detonate)
+	if (ATTR_CHANGED(dml_detonate))
 		SendFlags |= PLAYER_AMMO2;
- 	if (dml_payload_net == dml_payload)
+	if (ATTR_CHANGED(dml_payload))
 		SendFlags |= PLAYER_AMMO2;
- 	if (chem_acid_net == chem_acid)
+	if (ATTR_CHANGED(chem_acid))
 		SendFlags |= PLAYER_AMMO2;
- 	if (chem_neutral_net == chem_neutral)
+	if (ATTR_CHANGED(chem_neutral))
 		SendFlags |= PLAYER_AMMO2;
- 	if (chem_base_net == chem_base)
+	if (ATTR_CHANGED(chem_base))
 		SendFlags |= PLAYER_AMMO2;
- 	if (chem_pressure_net == chem_pressure)
+	if (ATTR_CHANGED(chem_pressure))
 		SendFlags |= PLAYER_AMMO2;
 
- 	if (beam_range_net == beam_range)
+	if (ATTR_CHANGED(beam_range))
 		SendFlags |= PLAYER_AMMO3;
- 	if (beam_poweracc_net == beam_poweracc)
+	if (ATTR_CHANGED(beam_poweracc))
 		SendFlags |= PLAYER_AMMO3;
- 	if (beam_lightning_net == beam_lightning)
+	if (ATTR_CHANGED(beam_lightning))
 		SendFlags |= PLAYER_AMMO3;
- 	if (gren_detonate_net == gren_detonate)
+	if (ATTR_CHANGED(gren_detonate))
 		SendFlags |= PLAYER_AMMO3;
- 	if (gren_payload_net == gren_payload)
+	if (ATTR_CHANGED(gren_payload))
 		SendFlags |= PLAYER_AMMO3;
- 	if (menu_active_net == menu_active)
+	if (ATTR_CHANGED(menu_active))
 		SendFlags |= PLAYER_AMMO3;
-	if (dml_state_net == dml_state)
+	if (ATTR_CHANGED(dml_state))
 		SendFlags |= PLAYER_AMMO3;
 
-	ammo_battery_net = ammo_battery;
-	ammo_chem_net = ammo_chem;
-	ammo_rocket_net = ammo_rocket;
-	ammo_gauss_net = ammo_gauss;
-	ammo_minigun_net = ammo_minigun;
-	ammo_buckshot_net = ammo_buckshot;
-	fist_mode_net = fist_mode;
-	gauss_mode_net = gauss_mode;
-	shotgun_shells_net = shotgun_shells;
-	shotgun_spread_net = shotgun_spread;
-	
-	dml_launch_net = dml_launch;
-	dml_flightpath_net = dml_flightpath;
-	dml_detonate_net = dml_detonate;
-	dml_payload_net = dml_payload;
-	chem_acid_net = chem_acid;
-	chem_neutral_net = chem_neutral;
-	chem_base_net = chem_base;
-	chem_pressure_net = chem_pressure;
+	SAVE_STATE(anim_top);
+	SAVE_STATE(anim_top_time);
+	SAVE_STATE(anim_top_delay);
+	SAVE_STATE(anim_bottom);
+	SAVE_STATE(anim_bottom_time);
 
-	beam_range_net = beam_range;
-	beam_poweracc_net = beam_poweracc;
-	beam_lightning_net = beam_lightning;
-	gren_detonate_net = gren_detonate;
-	gren_payload_net = gren_payload;
-	menu_active_net = menu_active;
-	dml_state_net = dml_state;
+	SAVE_STATE(ammo_battery);
+	SAVE_STATE(ammo_chem);
+	SAVE_STATE(ammo_rocket);
+	SAVE_STATE(ammo_gauss);
+	SAVE_STATE(ammo_minigun);
+	SAVE_STATE(ammo_buckshot);
+	SAVE_STATE(fist_mode);
+	SAVE_STATE(gauss_mode);
+	SAVE_STATE(shotgun_shells);
+	SAVE_STATE(shotgun_spread);
+
+	SAVE_STATE(dml_launch);
+	SAVE_STATE(dml_flightpath);
+	SAVE_STATE(dml_detonate);
+	SAVE_STATE(dml_payload);
+	SAVE_STATE(chem_acid);
+	SAVE_STATE(chem_neutral);
+	SAVE_STATE(chem_base);
+	SAVE_STATE(chem_pressure);
+
+	SAVE_STATE(beam_range);
+	SAVE_STATE(beam_poweracc);
+	SAVE_STATE(beam_lightning);
+	SAVE_STATE(gren_detonate);
+	SAVE_STATE(gren_payload);
+
+	SAVE_STATE(menu_active);
+	SAVE_STATE(dml_state);
 }
 
 /*
@@ -367,11 +370,11 @@ float
 player::SendEntity(entity ePEnt, float fChanged)
 {
 	if (health <= 0 && ePEnt != this) {
-		return FALSE;
+		return (0);
 	}
 
 	if (clienttype(ePEnt) != CLIENTTYPE_REAL) {
-		return FALSE;
+		return (0);
 	}
 
 	if (ePEnt != self) {
@@ -433,6 +436,6 @@ player::SendEntity(entity ePEnt, float fChanged)
 		WriteByte(MSG_ENTITY, dml_state);
 	}
 
-	return TRUE;
+	return (1);
 }
 #endif

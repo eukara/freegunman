@@ -61,7 +61,7 @@ int Weapons_InputForward(player pl)
 	if (gp_inputforward[pl.activeweapon] != __NULL__) {
 		return gp_inputforward[pl.activeweapon](pl);
 	}
-	return TRUE;
+	return (1);
 }
 
 int Weapons_InputBack(player pl)
@@ -69,6 +69,6 @@ int Weapons_InputBack(player pl)
 	if (gp_inputback[pl.activeweapon] != __NULL__) {
 		return gp_inputback[pl.activeweapon](pl);
 	}
-	return TRUE;
+	return (1);
 }
 #endif

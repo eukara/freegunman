@@ -193,7 +193,7 @@ w_gausspistol_deathmsg(void)
 float
 w_gausspistol_aimanim(void)
 {
-	return 0;
+	return (0);
 }
 
 int
@@ -205,10 +205,10 @@ w_gausspistol_pickup(int new, int startammo)
 	if (pl.ammo_gauss < 150) {
 		pl.ammo_gauss = bound(0, pl.ammo_gauss + 35, 150);
 	} else {
-		return FALSE;
+		return (0);
 	}
 #endif
-	return TRUE;
+	return (1);
 }
 
 void
@@ -399,24 +399,24 @@ int
 w_gausspistol_hudforward(player pl)
 {
 	if (pl.a_ammo1 <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	pl.a_ammo3 = bound(GM_SINGLE, pl.a_ammo3 - 1, GM_FAST);
 	sendevent("w_gp_setmode", "i", pl.a_ammo3);
-	return FALSE;
+	return (0);
 }
 
 int
 w_gausspistol_hudback(player pl)
 {
 	if (pl.a_ammo1 <= 0) {
-		return TRUE;
+		return (1);
 	}
 
 	pl.a_ammo3 = bound(GM_SINGLE, pl.a_ammo3 + 1, GM_FAST);
 	sendevent("w_gp_setmode", "i", pl.a_ammo3);
-	return FALSE;
+	return (0);
 }
 #else
 void

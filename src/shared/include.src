@@ -1,7 +1,7 @@
  #includelist
 ../../../valve/src/shared/flags.h
 player.qc
-../../../valve/src/shared/weapon_common.h
+../../../base/src/shared/weapon_common.h
 ../../../valve/src/shared/animations.h
 ../../../valve/src/shared/animations.qc
 ../../../valve/src/shared/pmove.qc
@@ -26,6 +26,6 @@ w_dml.qc
 w_minigun.qc
 w_aicore.qc
 weapons.qc
-../../../valve/src/shared/weapon_common.qc
+../../../base/src/shared/weapon_common.qc
 input.qc
 #endlist
