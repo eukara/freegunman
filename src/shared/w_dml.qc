@@ -377,7 +377,7 @@ w_dml_precache(void)
 weapon_t w_dml =
 {
 	.name		= "dml",
-	.id			= ITEM_DML,
+	.id		= ITEM_DML,
 	.slot		= 3,
 	.slot_pos	= 1,
 	.draw		= w_dml_draw,

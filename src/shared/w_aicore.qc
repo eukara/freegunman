@@ -122,7 +122,7 @@ w_aicore_precache(void)
 weapon_t w_aicore =
 {
 	.name		= "aicore",
-	.id			= ITEM_AICORE,
+	.id		= ITEM_AICORE,
 	.slot		= 0,
 	.slot_pos	= 1,
 	.draw		= w_aicore_draw,

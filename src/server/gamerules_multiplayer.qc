@@ -55,6 +55,7 @@ HLMultiplayerRules::PlayerDeath(base_player pp)
 	corpse.frame = ANIM_DIESIMPLE;
 	corpse.angles = pl.angles;
 	corpse.velocity = pl.velocity;
+	corpse.colormap = pl.colormap;
 }
 
 void

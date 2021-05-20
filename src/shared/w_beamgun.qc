@@ -255,7 +255,7 @@ w_beamgun_precache(void)
 weapon_t w_beamgun =
 {
 	.name		= "beamgun",
-	.id			= ITEM_BEAMGUN,
+	.id		= ITEM_BEAMGUN,
 	.slot		= 3,
 	.slot_pos	= 0,
 	.draw		= w_beamgun_draw,

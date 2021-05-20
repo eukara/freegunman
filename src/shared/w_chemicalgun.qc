@@ -357,7 +357,7 @@ w_chemicalgun_precache(void)
 weapon_t w_chemicalgun =
 {
 	.name		= "chemicalgun",
-	.id			= ITEM_CHEMICALGUN,
+	.id		= ITEM_CHEMICALGUN,
 	.slot		= 4,
 	.slot_pos	= 1,
 	.draw		= w_chemicalgun_draw,

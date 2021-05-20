@@ -365,7 +365,7 @@ w_gausspistol_precache(void)
 weapon_t w_gausspistol =
 {
 	.name		= "gausspistol",
-	.id			= ITEM_GAUSSPISTOL,
+	.id		= ITEM_GAUSSPISTOL,
 	.slot		= 1,
 	.slot_pos	= 0,
 	.draw		= w_gausspistol_draw,

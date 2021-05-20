@@ -266,7 +266,7 @@ w_fists_precache(void)
 weapon_t w_fists =
 {
 	.name		= "fists",
-	.id			= ITEM_FISTS,
+	.id		= ITEM_FISTS,
 	.slot		= 0,
 	.slot_pos	= 0,
 	.draw		= w_fists_draw,

@@ -219,7 +219,7 @@ w_grenade_precache(void)
 weapon_t w_grenade =
 {
 	.name		= "grenade",
-	.id			= ITEM_GRENADE,
+	.id		= ITEM_GRENADE,
 	.slot		= 4,
 	.slot_pos	= 0,
 	.draw		= w_grenade_draw,
