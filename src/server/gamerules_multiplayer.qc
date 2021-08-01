@@ -24,6 +24,14 @@ HLMultiplayerRules::FrameStart(void)
 }
 
 void
+HLMultiplayerRules::CheckRules(void)
+{
+	/* last person who killed somebody has hit the limit */
+	if (g_dmg_eAttacker.frags >= cvar("mp_fraglimit"))
+		IntermissionStart();
+}
+
+void
 HLMultiplayerRules::PlayerDeath(base_player pp)
 {
 	player pl = (player)pp;
@@ -123,4 +131,12 @@ HLMultiplayerRules::ConsoleCommand(base_player pp, string cmd)
 	}
 
 	return (1);
+}
+
+void
+HLMultiplayerRules::HLMultiplayerRules(void)
+{
+	/* these lines do nothing but tell the server to register those cvars */
+	autocvar(mp_timelimit, 15, "Timelimit for multiplayer rounds");
+	autocvar(mp_fraglimit, 15, "Points limit for multiplayer rounds");
 }
