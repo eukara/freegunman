@@ -87,13 +87,15 @@ read CHOICE
 
 if [[ "$CHOICE" == [Yy]* ]]; then
 	# check if we require rippin tunes
-	if ! [ -f "$SCRPATH/music/track02.wav" ]; then
+	if ! [ -f "$SCRPATH/music/track02.wav" ] && ! [ -f "$SCRPATH/music/track02.ogg" ]; then
 		if [ -x "$(command -v cdparanoia)" ]; then
 			mkdir -p "./music"
 			cd "./music"
 			cdparanoia -B
 			rename ".cdda." "." *.wav
 
+			# Maybe the user does not have the physical disc and cdp fails.
+			if [ -f "$SCRPATH/music/track02.wav" ]; then
 			# I'd offer FLAC, but that also requires the ffmpeg plugin
 			if [ -x "$(command -v oggenc)" ]; then
 				printf "All done. Would you like to convert them to OGG for playback compatibility\nas well as space preservation (frees up ~150 MB)?\ny/n: "
@@ -102,6 +104,7 @@ if [[ "$CHOICE" == [Yy]* ]]; then
 					oggenc *.wav
 					rm *.wav
 				fi
+			fi
 			fi
 		else
 			printf "cdparanoia is missing. Cannot rip music.\nPlease run the installer again once you've got it installed.\n"
