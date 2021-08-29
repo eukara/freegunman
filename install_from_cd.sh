@@ -40,41 +40,77 @@ export WINEPREFIX="${SCRPATH}/prefix"
 export WINEARCH=win32
 DATA_PATH="${WINEPREFIX}/drive_c/Sierra/Gunman/"
 
-# Check if we need to install the content, or throw a warning.
-if ! [ -f "$SCRPATH/$OUTPK3DIR/liblist.gam" ]; then
-	# May already have been extracted here (debug)
-	if ! [ -f "$DATA_PATH"/gunman.exe ]; then
-		# Because /x does NOT preserve directories.
-		wine "$CDROM_PATH"/rewolf/install.EXE /s
+# No pak0 present
+if ! [ -f "$SCRPATH/pak0_cd.pk3" ]; then
+	# Check if we need to install the content, or throw a warning.
+	if ! [ -f "$SCRPATH/$OUTPK3DIR/liblist.gam" ]; then
+		# May already have been extracted here (debug)
+		if ! [ -f "$DATA_PATH"/gunman.exe ]; then
+			# Because /x does NOT preserve directories.
+			wine "$CDROM_PATH"/rewolf/install.EXE /s
+		fi
+
+		# Move rewolf to become OUTPK3DIR
+		mv "$DATA_PATH/rewolf" "$SCRPATH/$OUTPK3DIR"
+		# Logos need to be in the game-dir
+		mv "$DATA_PATH/logos" "$SCRPATH/$OUTPK3DIR/logos"
+	else
+		printf "$OUTPK3DIR already exists... everything okay?\n"
 	fi
 
-	# Move rewolf to become OUTPK3DIR
-	mv "$DATA_PATH/rewolf" "$SCRPATH/$OUTPK3DIR"
-	# Logos need to be in the game-dir
-	mv "$DATA_PATH/logos" "$SCRPATH/$OUTPK3DIR/logos"
-else
-	printf "$OUTPK3DIR already exists... everything okay?\n"
+	# Make the pk3 archive
+	cd "$SCRPATH/$OUTPK3DIR"
+	mk_pk3 pak0_cd
 fi
-
-# Make the pk3 archive
-cd "$SCRPATH/$OUTPK3DIR"
-mk_pk3 pak0_cd
 
 # Make sure we're back in here
 cd "$SCRPATH"
 
-# imagemagick will help us get our icon
-if [ -x "$(command -v convert)" ]; then
-	printf "Detected ImageMagick's convert... giving you a nice icon!\n"
-	# check if we need an icon.tga
-	if ! [ -f "$SCRPATH/icon.tga" ]; then
+# check if we need an icon.tga
+if ! [ -f "$SCRPATH/icon.tga" ]; then
+	# imagemagick will help us get our icon
+	if [ -x "$(command -v convert)" ]; then
+		printf "Detected ImageMagick's convert... giving you a nice icon!\n"
 		convert "$DATA_PATH/rewolf.ico" "$SCRPATH/rewolf.tga"
 		rm "$SCRPATH/rewolf-0.tga"
 		mv "$SCRPATH/rewolf-1.tga" "$SCRPATH/icon.tga"
+	else
+		printf "No ImageMagick found... can't give you a window icon then.\n"
 	fi
 fi
 
-# Redundant - but you NEVER know where we'll execute the next two commands
+# Make sure we're back in here
+cd "$SCRPATH"
+
+printf "All done. Would you like to rip the the Compact Disc Digital Audio for music?\ny/n: "
+read CHOICE
+
+if [[ "$CHOICE" == [Yy]* ]]; then
+	# check if we require rippin tunes
+	if ! [ -f "$SCRPATH/music/track02.wav" ]; then
+		if [ -x "$(command -v cdparanoia)" ]; then
+			mkdir -p "./music"
+			cd "./music"
+			cdparanoia -B
+			rename ".cdda." "." *.wav
+
+			# I'd offer FLAC, but that also requires the ffmpeg plugin
+			if [ -x "$(command -v oggenc)" ]; then
+				printf "All done. Would you like to convert them to OGG for playback compatibility\nas well as space preservation (frees up ~150 MB)?\ny/n: "
+				read CHOICE
+				if [[ "$CHOICE" == [Yy]* ]]; then
+					oggenc *.wav
+					rm *.wav
+				fi
+			fi
+		else
+			printf "cdparanoia is missing. Cannot rip music.\nPlease run the installer again once you've got it installed.\n"
+		fi
+	else
+		printf "Music was already present.\n"
+	fi
+fi
+
 cd "$SCRPATH"
 
 # Be real careful here
