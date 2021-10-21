@@ -36,6 +36,7 @@ void
 ClientGame_RendererRestart(string rstr)
 {
 	Obituary_Precache();
+	Damage_Precache();
 
 	FX_Blood_Init();
 	FX_BreakModel_Init();

@@ -20,6 +20,7 @@
 ../shared/include.src
 
 decore.qc
+../../../valve/src/client/damage.qc
 ../../../base/src/client/draw.qc
 init.qc
 ../../../valve/src/client/flashlight.qc
