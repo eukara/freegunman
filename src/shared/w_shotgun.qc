@@ -274,7 +274,7 @@ w_shotgun_hud(void)
 		spreadstr = sprintf("SPREAD: %s", gsmodes[getstati(41)]);
 		pos = g_hudmins + (g_hudres / 2) + [-48,-16];
 
-		drawfont = FONT_20;
+		drawfont = Font_GetID(FONT_20);
 		drawstring(pos, shellstr, [20,20], col1, 1.0f,
 			DRAWFLAG_ADDITIVE);
 		drawstring(pos + [0,24], spreadstr, [20,20], col2, 1.0f,

@@ -194,7 +194,7 @@ w_beamgun_hud(void)
 		txt4 = sprintf("LIGHTNING: %s", lmodes[getstati(48)]);
 		pos = g_hudmins + (g_hudres / 2) + [-80,-48];
 
-		drawfont = FONT_20;
+		drawfont = Font_GetID(FONT_20);
 		drawstring(pos, txt1, [20,20], col1, 1.0f,
 			DRAWFLAG_ADDITIVE);
 		pos[1] += 24;

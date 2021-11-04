@@ -180,7 +180,7 @@ w_grenade_hud(void)
 		txt2 = sprintf("PAYLOAD: %s", pmodes[getstati(50)]);
 		pos = g_hudmins + (g_hudres / 2) + [-48,-16];
 
-		drawfont = FONT_20;
+		drawfont = Font_GetID(FONT_20);
 		drawstring(pos, txt1, [20,20], col1, 1.0f,
 			DRAWFLAG_ADDITIVE);
 		drawstring(pos + [0,24], txt2, [20,20], col2, 1.0f,

@@ -292,7 +292,7 @@ w_chemicalgun_hud(void)
 		txt4 = "PRESSURE:";
 		pos = g_hudmins + (g_hudres / 2) + [-128,-96];
 
-		drawfont = FONT_20;
+		drawfont = Font_GetID(FONT_20);
 		drawstring(pos + [0,8], txt1, [20,20], col1, 1.0f,
 			DRAWFLAG_ADDITIVE);
 		w_chemgun_drawvial(pos, getstati(51), [0,1,0]);
