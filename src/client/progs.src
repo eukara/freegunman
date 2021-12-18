@@ -32,6 +32,7 @@ entities.qc
 ../../../valve/src/client/viewmodel.qc
 ../../../valve/src/client/view.qc
 ../../../valve/src/client/obituary.qc
+../../../valve/src/client/hud_dmgnotify.qc
 hud.qc
 hud_weaponselect.qc
 ../../../valve/src/client/scoreboard.qc

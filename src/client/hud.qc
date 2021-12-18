@@ -54,6 +54,7 @@ HUD_Init(void)
 	precache_model("sprites/hudpulse.spr");
 	precache_pic("gfx/vgui/640_metalhud_small.tga");
 	precache_pic("gfx/vgui/640_metalhud.tga");
+	HUD_DamageNotify_Init();
 }
 
 /*
@@ -283,6 +284,7 @@ HUD_Draw(void)
 	Textmenu_Draw();
 	Obituary_Draw();
 	Damage_Draw();
+	HUD_DamageNotify_Draw();
 	HUD_DrawHealth();
 	Weapons_DrawCrosshair();
 	HUD_DrawWeaponSelect();
