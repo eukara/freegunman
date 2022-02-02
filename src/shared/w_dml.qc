@@ -329,7 +329,7 @@ w_dml_hud(void)
 	drawsubpic(
 		pos,
 		[63,31],
-		"sprites/crosshairs.spr_0.tga",
+		g_cross_spr,
 		[149/256,1/128],
 		[63/256, 31/128],
 		[1,1,1],

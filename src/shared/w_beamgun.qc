@@ -213,7 +213,7 @@ w_beamgun_hud(void)
 	drawsubpic(
 		pos,
 		[31,31],
-		"sprites/crosshairs.spr_0.tga",
+		g_cross_spr,
 		[116/256,1/128],
 		[31/256, 31/128],
 		[1,1,1],

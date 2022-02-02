@@ -149,6 +149,17 @@ w_fists_primary(void)
 		} else {
 			Weapons_ViewAnimation(KNIFE_ATTACK2);
 		}
+
+#ifdef SERVER
+		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 96),\
+			FALSE, pl);
+		if (trace_fraction <= 1.0) {
+			if (trace_ent.takedamage = DAMAGE_YES) {
+				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_knife1_d", 25), WEAPON_GAUSSPISTOL, DMG_GENERIC);
+			}
+		}
+#endif
+
 		pl.w_attack_next = 0.5f;
 		pl.w_idle_next = pl.w_attack_next;
 	} else {
@@ -163,6 +174,17 @@ w_fists_primary(void)
 			Sound_Play(pl, CHAN_WEAPON, "weapon_fists.hitleft");
 			#endif
 		}
+
+#ifdef SERVER
+		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 96),\
+			FALSE, pl);
+		if (trace_fraction <= 1.0) {
+			if (trace_ent.takedamage = DAMAGE_YES) {
+				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_twohandpunch_d", 10), WEAPON_GAUSSPISTOL, DMG_GENERIC);
+			}
+		}
+#endif
+
 		pl.w_attack_next = 0.25f;
 		pl.w_idle_next = pl.w_attack_next;
 	}

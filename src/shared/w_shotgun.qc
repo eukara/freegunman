@@ -110,9 +110,11 @@ w_shotgun_primary(void)
 	Sound_Play(pl, CHAN_WEAPON, "weapon_shotgun.fire");
 #else
 	View_SetMuzzleflash(MUZZLE_SMALL);
+#endif
+
 	Weapons_ViewPunchAngle([-5,0,0]);
 
-	int r  = (float)input_sequence % 4;
+	int r  = floor(pseudorandom() * 4.0);
 	switch (r) {
 	case 0:
 		Weapons_ViewAnimation(SHOTGUN_SHOOT1);
@@ -126,7 +128,6 @@ w_shotgun_primary(void)
 	default:
 		Weapons_ViewAnimation(SHOTGUN_SHOOT4);
 	}
-#endif
 
 	pl.w_attack_next = 0.846154f;
 	pl.w_idle_next = 2.5f;
@@ -287,7 +288,7 @@ w_shotgun_hud(void)
 	drawsubpic(
 		pos,
 		[31,31],
-		"sprites/crosshairs.spr_0.tga",
+		g_cross_spr,
 		[34/256,1/128],
 		[31/256, 31/128],
 		[1,1,1],
@@ -327,7 +328,7 @@ w_shotgun_precache(void)
 weapon_t w_shotgun =
 {
 	.name		= "shotgun",
-	.id		= ITEM_SHOTGUN,
+	.id			= ITEM_SHOTGUN,
 	.slot		= 2,
 	.slot_pos	= 0,
 	.draw		= w_shotgun_draw,

@@ -89,25 +89,24 @@ w_minigun_primary(void)
 	Sound_Play(pl, CHAN_WEAPON, "weapon_minigun.fire");
 #else
 	View_SetMuzzleflash(MUZZLE_RIFLE);
-	Weapons_ViewPunchAngle([-2,0,0]);
 #endif
+
+	Weapons_ViewPunchAngle([-2,0,0]);
+
 
 	pl.ammo_minigun--;
 
 	if (pl.menu_active == 1) {
-#ifdef CLIENT
 		Weapons_ViewAnimation(MG_FIRELOOP);
-#else
-		TraceAttack_FireBullets(1, src, 8, [0.1,0.1], WEAPON_MINIGUN);
+#ifdef SERVER
+		TraceAttack_FireBullets(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.1,0.1], WEAPON_MINIGUN);
 #endif
 		pl.w_attack_next = 0.1f;
 		pl.w_idle_next = 0.1f;
 	} else {
-
-#ifdef CLIENT
 		Weapons_ViewAnimation(MG_FIRE);
-#else
-		TraceAttack_FireBullets(1, src, 8, [0.05,0.05], WEAPON_MINIGUN);
+#ifdef SERVER
+		TraceAttack_FireBullets(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.05,0.05], WEAPON_MINIGUN);
 #endif
 		pl.w_attack_next = 0.25f;
 		pl.w_idle_next = 2.5f;
@@ -128,13 +127,14 @@ w_minigun_secondary(void)
 	} else {
 		Sound_Play(pl, 8, "weapon_minigun.spindown");
 	}
-#else
+#endif
+
 	if (pl.menu_active == 0) {
 		Weapons_ViewAnimation(MG_SPINUP);
 	} else {
 		Weapons_ViewAnimation(MG_SPINDOWN);
 	}
-#endif
+
 	pl.menu_active = 1 - pl.menu_active;
 
 	pl.w_attack_next = 2.0f;
@@ -196,7 +196,7 @@ w_minigun_hud(void)
 	drawsubpic(
 		pos,
 		[47,31],
-		"sprites/crosshairs.spr_0.tga",
+		g_cross_spr,
 		[67/256,1/128],
 		[47/256, 31/128],
 		[1,1,1],
@@ -251,7 +251,7 @@ w_minigun_precache(void)
 weapon_t w_minigun =
 {
 	.name		= "minigun",
-	.id		= ITEM_MINIGUN,
+	.id			= ITEM_MINIGUN,
 	.slot		= 2,
 	.slot_pos	= 1,
 	.draw		= w_minigun_draw,

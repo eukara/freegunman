@@ -36,7 +36,7 @@ monster_trainingbot.qc
 
 gamerules.qc
 ../../../valve/src/server/gamerules_singleplayer.qc
-../../../valve/src/server/gamerules_multiplayer.qc
+gamerules_multiplayer.qc
 
 ../../../valve/src/server/client.qc
 ../../../valve/src/server/server.qc

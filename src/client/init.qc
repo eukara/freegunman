@@ -44,6 +44,7 @@ ClientGame_RendererRestart(string rstr)
 	FX_GibHuman_Init();
 	FX_Spark_Init();
 	FX_Impact_Init();
+	FX_GaussBeam_Init();
 
 	BEAM_TRIPMINE = particleeffectnum("weapon_tripmine.beam");
 
@@ -51,4 +52,5 @@ ClientGame_RendererRestart(string rstr)
 	MUZZLE_RIFLE = (int)getmodelindex("sprites/muzzleflash1.spr");
 	MUZZLE_SMALL = (int)getmodelindex("sprites/muzzleflash2.spr");
 	MUZZLE_WEIRD = (int)getmodelindex("sprites/muzzleflash3.spr");
+	g_cross_spr = spriteframe("sprites/crosshairs.spr", 0, 0.0f);
 }

@@ -62,7 +62,7 @@ w_gausspistol_release(void)
 		return;
 	}
 
-	int r  = (float)input_sequence % 5;
+	int r  = floor(pseudorandom() * 5.0f);
 	switch (r) {
 	case 0:
 	case 1:
@@ -76,6 +76,45 @@ w_gausspistol_release(void)
 		pl.w_idle_next = 3.0f;
 	}
 }
+
+#ifdef SERVER
+void
+w_gausspistol_firecharge(vector pos, player pl)
+{
+	static void w_gausspistol_firecharge_impact(entity target, entity source) {
+		Damage_Apply(target, source.owner, Skill_GetValue("sk_gaussslow_d", 50), WEAPON_GAUSSPISTOL, DMG_GENERIC);
+	}
+
+	NSProjectile ball = spawn(NSProjectile);
+	ball.SetModel("sprites/gausswomp.spr");
+	ball.SetRenderMode(RM_ADDITIVE);
+	ball.SetOwner(pl);
+	ball.SetImpact(w_gausspistol_firecharge_impact);
+
+	makevectors(pl.v_angle);
+	ball.SetOrigin(pos + (v_forward * 8));
+	ball.SetVelocity(v_forward * 500);
+}
+
+void
+w_gausspistol_firerapid(vector pos, player pl)
+{
+	static void w_gausspistol_firerapid_impact(entity target, entity source) {
+		Damage_Apply(target, source.owner, Skill_GetValue("sk_gaussfast_d", 13), WEAPON_GAUSSPISTOL, DMG_GENERIC);
+	}
+
+	NSProjectile ball = spawn(NSProjectile);
+	ball.SetModel("sprites/gausswomp.spr");
+	ball.SetScale(0.25f);
+	ball.SetRenderMode(RM_ADDITIVE);
+	ball.SetOwner(pl);
+	ball.SetImpact(w_gausspistol_firerapid_impact);
+
+	makevectors(pl.v_angle);
+	ball.SetOrigin(pos + (v_forward * 8));
+	ball.SetVelocity(v_forward * 500);
+}
+#endif
 
 void
 w_gausspistol_primary(void)
@@ -99,27 +138,29 @@ w_gausspistol_primary(void)
 	}
 
 	/* ammo check */
-	if (pl.a_ammo2 <= 0) {
+	if (pl.ammo_gauss <= 0) {
 		return;
 	}
 
-	if (pl.a_ammo3 == GM_CHARGE && pl.a_ammo2 < 10) {
+	if (pl.gauss_mode == GM_CHARGE && pl.ammo_gauss < 10) {
 		return;
 	}
 
-	switch (pl.a_ammo3) {
+	switch (pl.gauss_mode) {
 	case GM_FAST:
 		Weapons_ViewAnimation(GP_FIREFAST);
 #ifdef SERVER
+		w_gausspistol_firerapid(Weapons_GetCameraPos(), pl);
 		Sound_Play(pl, CHAN_WEAPON, "weapon_gausspistol.firefast");
 #endif
-		pl.w_attack_next = 0.15f;
+		pl.w_attack_next = 0.1f;
 		pl.w_idle_next = 2.5f;
 		break;
 	case GM_CHARGE:
 		take = 10;
 		Weapons_ViewAnimation(GP_FIRECHARGE);
 #ifdef SERVER
+		w_gausspistol_firecharge(Weapons_GetCameraPos(), pl);
 		Sound_Play(pl, CHAN_WEAPON, "weapon_gausspistol.firecharge");
 		Sound_Play(pl, 8, "weapon_gausspistol.charge");
 #endif
@@ -130,6 +171,16 @@ w_gausspistol_primary(void)
 		pl.gflags |= GF_SEMI_TOGGLED;
 		Weapons_ViewAnimation(GP_FIRESINGLE);
 #ifdef SERVER
+		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 1024),\
+			FALSE, pl);
+
+		if (trace_fraction <= 1.0) {
+			if (trace_ent.takedamage == DAMAGE_YES) {
+				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_gaussshot_d", 10), WEAPON_GAUSSPISTOL, DMG_GENERIC);
+			}
+
+		}
+		FX_GaussBeam(Weapons_GetCameraPos(), input_angles, pl);
 		Sound_Play(pl, CHAN_WEAPON, "weapon_gausspistol.firesingle");
 #endif
 		pl.w_attack_next = 0.15f;
@@ -139,13 +190,12 @@ w_gausspistol_primary(void)
 
 	src = Weapons_GetCameraPos();
 
-#ifdef SERVER
-	pl.ammo_gauss -= take;
-#else
-	pl.a_ammo2 -= take;
-	View_SetMuzzleflash(MUZZLE_SMALL);
-	Weapons_ViewPunchAngle([-5,0,0]);
+#ifdef CLIENT
+	View_SetMuzzleflash(MUZZLE_WEIRD);
 #endif
+
+	pl.ammo_gauss -= take;
+	Weapons_ViewPunchAngle([-5,0,0]);
 }
 
 void
@@ -167,9 +217,7 @@ w_gausspistol_secondary(void)
 void
 w_gausspistol_updateammo(player pl)
 {
-#ifdef SERVER
 	Weapons_UpdateAmmo(pl, -1, pl.ammo_gauss, pl.gauss_mode);
-#endif
 }
 
 string
@@ -238,7 +286,7 @@ w_gausspistol_hud(void)
 		pos = g_hudmins + (g_hudres / 2) + [-96,-72];
 
 		/* far left */
-		if (pl.a_ammo3 == GM_SINGLE) {
+		if (pl.gauss_mode == GM_SINGLE) {
 			drawsubpic(
 				pos,
 				[64,144],
@@ -260,7 +308,7 @@ w_gausspistol_hud(void)
 				DRAWFLAG_ADDITIVE
 			);
 		}
-		if (pl.a_ammo3 == GM_CHARGE) {
+		if (pl.gauss_mode == GM_CHARGE) {
 			drawsubpic(
 				pos,
 				[64,144],
@@ -292,7 +340,7 @@ w_gausspistol_hud(void)
 				DRAWFLAG_ADDITIVE
 			);
 		}
-		if (pl.a_ammo3 == GM_FAST) {
+		if (pl.gauss_mode == GM_FAST) {
 			drawsubpic(
 				pos,
 				[128,144],
@@ -321,7 +369,7 @@ w_gausspistol_hud(void)
 	drawsubpic(
 		pos,
 		[31,31],
-		"sprites/crosshairs.spr_0.tga",
+		g_cross_spr,
 		[1/256,1/128],
 		[31/256, 31/128],
 		[1,1,1],
@@ -359,13 +407,14 @@ w_gausspistol_precache(void)
 	precache_model("models/v_guasspistol.mdl");
 	precache_model("sprites/gausshud1.spr");
 	precache_model("sprites/gausshud2.spr");
+	precache_model("sprites/gausswomp.spr");
 
 }
 
 weapon_t w_gausspistol =
 {
 	.name		= "gausspistol",
-	.id		= ITEM_GAUSSPISTOL,
+	.id			= ITEM_GAUSSPISTOL,
 	.slot		= 1,
 	.slot_pos	= 0,
 	.draw		= w_gausspistol_draw,
@@ -402,8 +451,8 @@ w_gausspistol_hudforward(player pl)
 		return (1);
 	}
 
-	pl.a_ammo3 = bound(GM_SINGLE, pl.a_ammo3 - 1, GM_FAST);
-	sendevent("w_gp_setmode", "i", pl.a_ammo3);
+	pl.gauss_mode = bound(GM_SINGLE, pl.gauss_mode - 1, GM_FAST);
+	sendevent("w_gp_setmode", "i", pl.gauss_mode);
 	return (0);
 }
 
@@ -414,8 +463,8 @@ w_gausspistol_hudback(player pl)
 		return (1);
 	}
 
-	pl.a_ammo3 = bound(GM_SINGLE, pl.a_ammo3 + 1, GM_FAST);
-	sendevent("w_gp_setmode", "i", pl.a_ammo3);
+	pl.gauss_mode = bound(GM_SINGLE, pl.gauss_mode + 1, GM_FAST);
+	sendevent("w_gp_setmode", "i", pl.gauss_mode);
 	return (0);
 }
 #else
@@ -423,7 +472,6 @@ void
 CSEv_w_gp_setmode_i(int f)
 {
 	player pl = (player)self;
-	pl.a_ammo3 = f;
 	pl.gauss_mode = f;
 }
 #endif
