@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -24,6 +24,8 @@ enum
 void
 w_aicore_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_aicore.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(AIC_DRAW);
@@ -122,7 +124,8 @@ w_aicore_precache(void)
 weapon_t w_aicore =
 {
 	.name		= "aicore",
-	.id		= ITEM_AICORE,
+	.id			= ITEM_AICORE,
+	.weight		= WEIGHT_AICORE,
 	.slot		= 0,
 	.slot_pos	= 1,
 	.draw		= w_aicore_draw,
@@ -139,6 +142,7 @@ weapon_t w_aicore =
 	.pmodel		= w_aicore_pmodel,
 	.deathmsg	= w_aicore_deathmsg,
 	.aimanim	= w_aicore_aimanim,
+	.type		= gunman_wpntype_close,
 	.hudpic		= w_aicore_hudpic
 };
 

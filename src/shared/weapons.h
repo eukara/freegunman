@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -28,3 +28,33 @@ enum
 	WEAPON_GRENADE,
 	WEAPON_CHEMICALGUN
 };
+
+/* weight table... I just guessed this was a good compromise */
+enum
+{
+	WEIGHT_AICORE,
+	WEIGHT_NONE,
+	WEIGHT_FISTS,
+	WEIGHT_GRENADE,
+	WEIGHT_GAUSSPISTOL,
+	WEIGHT_DML,
+	WEIGHT_SHOTGUN,
+	WEIGHT_MINIGUN,
+	WEIGHT_BEAMGUN,
+	WEIGHT_CHEMICALGUN
+};
+
+weapontype_t gunman_wpntype_ranged(void)
+{
+	return WPNTYPE_RANGED;
+}
+
+weapontype_t gunman_wpntype_close(void)
+{
+	return WPNTYPE_CLOSE;
+}
+
+weapontype_t gunman_wpntype_throw(void)
+{
+	return WPNTYPE_THROW;
+}

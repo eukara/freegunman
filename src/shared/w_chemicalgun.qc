@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -27,6 +27,8 @@ enum
 void
 w_chemicalgun_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_chemgun.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(CHEMGUN_DRAW);
@@ -357,7 +359,8 @@ w_chemicalgun_precache(void)
 weapon_t w_chemicalgun =
 {
 	.name		= "chemicalgun",
-	.id		= ITEM_CHEMICALGUN,
+	.id			= ITEM_CHEMICALGUN,
+	.weight		= WEIGHT_CHEMICALGUN,
 	.slot		= 4,
 	.slot_pos	= 1,
 	.draw		= w_chemicalgun_draw,
@@ -374,6 +377,7 @@ weapon_t w_chemicalgun =
 	.pmodel		= w_chemicalgun_pmodel,
 	.deathmsg	= w_chemicalgun_deathmsg,
 	.aimanim	= w_chemicalgun_aimanim,
+	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_chemicalgun_hudpic
 };
 

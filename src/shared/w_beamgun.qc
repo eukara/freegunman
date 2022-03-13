@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -29,6 +29,8 @@ enum
 void
 w_beamgun_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_beam.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(BEAMGUN_DRAW);
@@ -255,7 +257,8 @@ w_beamgun_precache(void)
 weapon_t w_beamgun =
 {
 	.name		= "beamgun",
-	.id		= ITEM_BEAMGUN,
+	.id			= ITEM_BEAMGUN,
+	.weight		= WEIGHT_BEAMGUN,
 	.slot		= 3,
 	.slot_pos	= 0,
 	.draw		= w_beamgun_draw,
@@ -272,6 +275,7 @@ weapon_t w_beamgun =
 	.pmodel		= w_beamgun_pmodel,
 	.deathmsg	= w_beamgun_deathmsg,
 	.aimanim	= w_beamgun_aimanim,
+	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_beamgun_hudpic
 };
 

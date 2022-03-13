@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -51,6 +51,8 @@ string gsmodes[] = {
 void
 w_shotgun_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_shotgun.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(SHOTGUN_DRAW);
@@ -271,8 +273,8 @@ w_shotgun_hud(void)
 			break;
 		}
 		
-		shellstr = sprintf("SHELLS: %i", getstati(40));
-		spreadstr = sprintf("SPREAD: %s", gsmodes[getstati(41)]);
+		shellstr = sprintf("SHELLS: %i", pl.shotgun_shells);
+		spreadstr = sprintf("SPREAD: %s", gsmodes[pl.shotgun_spread]);
 		pos = g_hudmins + (g_hudres / 2) + [-48,-16];
 
 		drawfont = Font_GetID(FONT_20);
@@ -345,6 +347,7 @@ weapon_t w_shotgun =
 	.pmodel		= w_shotgun_pmodel,
 	.deathmsg	= w_shotgun_deathmsg,
 	.aimanim	= w_shotgun_aimanim,
+	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_shotgun_hudpic
 };
 

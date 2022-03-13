@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -30,6 +30,8 @@ enum
 void
 w_minigun_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_mechagun.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(MG_DRAW);
@@ -268,6 +270,7 @@ weapon_t w_minigun =
 	.pmodel		= w_minigun_pmodel,
 	.deathmsg	= w_minigun_deathmsg,
 	.aimanim	= w_minigun_aimanim,
+	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_minigun_hudpic
 };
 

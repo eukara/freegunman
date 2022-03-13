@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -29,6 +29,8 @@ enum
 void
 w_grenade_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_grenade.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(GREN_DRAW);
@@ -219,7 +221,8 @@ w_grenade_precache(void)
 weapon_t w_grenade =
 {
 	.name		= "grenade",
-	.id		= ITEM_GRENADE,
+	.id			= ITEM_GRENADE,
+	.weight		= WEIGHT_GRENADE,
 	.slot		= 4,
 	.slot_pos	= 0,
 	.draw		= w_grenade_draw,
@@ -236,6 +239,7 @@ weapon_t w_grenade =
 	.pmodel		= w_grenade_pmodel,
 	.deathmsg	= w_grenade_deathmsg,
 	.aimanim	= w_grenade_aimanim,
+	.type		= gunman_wpntype_throw,
 	.hudpic		= w_grenade_hudpic
 };
 

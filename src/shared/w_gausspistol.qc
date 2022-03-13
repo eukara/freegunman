@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -42,6 +42,8 @@ enum
 void
 w_gausspistol_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_guasspistol.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(GP_DRAW);
@@ -122,13 +124,20 @@ w_gausspistol_primary(void)
 	vector src;
 	int take = 1;
 	player pl = (player)self;
-	
+
+	if (pl.menu_active > 0) {
+		pl.menu_active = 0;
+		pl.gflags |= GF_SEMI_TOGGLED;
+		pl.w_attack_next = 0.25f;
+		return;
+	}
+
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
 	}
 	
-	if (pl.a_ammo1 > 0) {
-		pl.a_ammo1 = 0;
+	if (pl.menu_active > 0) {
+		pl.menu_active = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
 		return;
 	}
@@ -210,7 +219,7 @@ w_gausspistol_secondary(void)
 	pl.gflags |= GF_SEMI_TOGGLED;
 
 	/* activate menu */
-	pl.a_ammo1 = 1;
+	pl.menu_active = 1;
 	w_gausspistol_release();
 }
 
@@ -282,7 +291,7 @@ w_gausspistol_hud(void)
 	HUD_DrawAmmo2();
 	
 	/* menu */
-	if (pl.a_ammo1 > 0) {
+	if (pl.menu_active > 0) {
 		pos = g_hudmins + (g_hudres / 2) + [-96,-72];
 
 		/* far left */
@@ -415,6 +424,7 @@ weapon_t w_gausspistol =
 {
 	.name		= "gausspistol",
 	.id			= ITEM_GAUSSPISTOL,
+	.weight		= WEIGHT_GAUSSPISTOL,
 	.slot		= 1,
 	.slot_pos	= 0,
 	.draw		= w_gausspistol_draw,
@@ -431,6 +441,7 @@ weapon_t w_gausspistol =
 	.pmodel		= w_gausspistol_pmodel,
 	.deathmsg	= w_gausspistol_deathmsg,
 	.aimanim	= w_gausspistol_aimanim,
+	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_gausspistol_hudpic
 };
 
@@ -447,7 +458,7 @@ weapon_gausspistol(void)
 int
 w_gausspistol_hudforward(player pl)
 {
-	if (pl.a_ammo1 <= 0) {
+	if (pl.menu_active <= 0) {
 		return (1);
 	}
 
@@ -459,7 +470,7 @@ w_gausspistol_hudforward(player pl)
 int
 w_gausspistol_hudback(player pl)
 {
-	if (pl.a_ammo1 <= 0) {
+	if (pl.menu_active <= 0) {
 		return (1);
 	}
 

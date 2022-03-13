@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -75,6 +75,8 @@ enum
 void
 w_dml_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	Weapons_SetModel("models/v_dml.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
 	Weapons_ViewAnimation(DML_DRAW);
@@ -304,10 +306,10 @@ w_dml_hud(void)
 			break;
 		}
 
-		txt1 = sprintf("LAUNCH: %s", lmodes[getstati(42)]);
-		txt2 = sprintf("FLIGHTPATH: %s", fmodes[getstati(43)]);
-		txt3 = sprintf("DETONATE: %s", dmodes[getstati(44)]);
-		txt4 = sprintf("PAYLOAD: %s", pmodes[getstati(45)]);
+		txt1 = sprintf("LAUNCH: %s", lmodes[pl.dml_launch]);
+		txt2 = sprintf("FLIGHTPATH: %s", fmodes[pl.dml_flightpath]);
+		txt3 = sprintf("DETONATE: %s", dmodes[pl.dml_detonate]);
+		txt4 = sprintf("PAYLOAD: %s", pmodes[pl.dml_payload]);
 		pos = g_hudmins + (g_hudres / 2) + [-80,-48];
 
 		drawfont = Font_GetID(FONT_20);
@@ -377,7 +379,8 @@ w_dml_precache(void)
 weapon_t w_dml =
 {
 	.name		= "dml",
-	.id		= ITEM_DML,
+	.id			= ITEM_DML,
+	.weight		= WEIGHT_DML,
 	.slot		= 3,
 	.slot_pos	= 1,
 	.draw		= w_dml_draw,
@@ -394,6 +397,7 @@ weapon_t w_dml =
 	.pmodel		= w_dml_pmodel,
 	.deathmsg	= w_dml_deathmsg,
 	.aimanim	= w_dml_aimanim,
+	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_dml_hudpic
 };
 

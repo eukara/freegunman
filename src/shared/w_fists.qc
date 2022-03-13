@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+ * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -52,6 +52,8 @@ w_fists_updateammo(player pl)
 void
 w_fists_draw(void)
 {
+	player pl = (player)self;
+	pl.menu_active = 0;
 	player pl = (player)self;
 	Weapons_SetModel("models/v_hands.mdl");
 	Weapons_SetGeomset("geomset 1 2\n");
@@ -153,7 +155,7 @@ w_fists_primary(void)
 #ifdef SERVER
 		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 96),\
 			FALSE, pl);
-		if (trace_fraction <= 1.0) {
+		if (trace_ent && trace_fraction <= 1.0) {
 			if (trace_ent.takedamage = DAMAGE_YES) {
 				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_knife1_d", 25), WEAPON_GAUSSPISTOL, DMG_GENERIC);
 			}
@@ -178,7 +180,7 @@ w_fists_primary(void)
 #ifdef SERVER
 		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 96),\
 			FALSE, pl);
-		if (trace_fraction <= 1.0) {
+		if (trace_ent && trace_fraction <= 1.0) {
 			if (trace_ent.takedamage = DAMAGE_YES) {
 				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_twohandpunch_d", 10), WEAPON_GAUSSPISTOL, DMG_GENERIC);
 			}
@@ -288,7 +290,8 @@ w_fists_precache(void)
 weapon_t w_fists =
 {
 	.name		= "fists",
-	.id		= ITEM_FISTS,
+	.id			= ITEM_FISTS,
+	.weight		= WEIGHT_FISTS,
 	.slot		= 0,
 	.slot_pos	= 0,
 	.draw		= w_fists_draw,
@@ -305,5 +308,6 @@ weapon_t w_fists =
 	.pmodel		= __NULL__,
 	.deathmsg	= w_fists_deathmsg,
 	.aimanim	= w_fists_aimanim,
+	.type		= gunman_wpntype_close,
 	.hudpic		= w_fists_hudpic
 };
