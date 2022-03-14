@@ -5,6 +5,7 @@ weapon_dml.customize
 
 weapon_dml.fire
 {
+	alerts
 	sample weapons/dml_fire.wav
 }
 
@@ -40,26 +41,31 @@ weapon_fists.missknife
 
 weapon_gausspistol.charge
 {
+	alerts
 	sample weapons/gauss_charge.wav
 }
 
 weapon_gausspistol.firecharge
 {
+	alerts
 	sample weapons/gauss_fire2.wav
 }
 
 weapon_gausspistol.firefast
 {
+	alerts
 	sample weapons/gauss_fire4.wav
 }
 
 weapon_gausspistol.firesingle
 {
+	alerts
 	sample weapons/gauss_fire1.wav
 }
 
 weapon_minigun.fire
 {
+	alerts
 	sample weapons/hks1.wav
 	sample weapons/hks2.wav
 	sample weapons/hks3.wav
@@ -77,5 +83,6 @@ weapon_minigun.spinup
 
 weapon_shotgun.fire
 {
+	alerts
 	sample weapons/sbarrel1.wav
 }
