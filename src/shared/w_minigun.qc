@@ -28,31 +28,29 @@ enum
 };
 
 void
-w_minigun_draw(void)
+w_minigun_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_mechagun.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(MG_DRAW);
+	Weapons_ViewAnimation(pl, MG_DRAW);
 }
 
 void
-w_minigun_holster(void)
+w_minigun_holster(player pl)
 {
-	Weapons_ViewAnimation(MG_DRAW);
+	Weapons_ViewAnimation(pl, MG_DRAW);
 }
 
 void
-w_minigun_release(void)
+w_minigun_release(player pl)
 {
-	player pl = (player)self;
 	if (pl.w_idle_next) {
 		return;
 	}
 
 	if (pl.menu_active == 1) {
-		Weapons_ViewAnimation(MG_IDLELOOP);
+		Weapons_ViewAnimation(pl, MG_IDLELOOP);
 		pl.w_idle_next = 0.666667f;
 		return;
 	}
@@ -63,29 +61,28 @@ w_minigun_release(void)
 	case 1:
 	case 2:
 	case 3:
-		Weapons_ViewAnimation(MG_IDLE);
+		Weapons_ViewAnimation(pl, MG_IDLE);
 		pl.w_idle_next = 10.0f;
 		break;
 	default:
-		Weapons_ViewAnimation(MG_FIDGET);
+		Weapons_ViewAnimation(pl, MG_FIDGET);
 		pl.w_idle_next = 2.0f;
 	}
 }
 
 void
-w_minigun_primary(void)
+w_minigun_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 	if (pl.w_attack_next) {
 		return;
 	}
 	if (pl.ammo_minigun <= 0) {
-		w_minigun_release();
+		w_minigun_release(pl);
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef SERVER
 	Sound_Play(pl, CHAN_WEAPON, "weapon_minigun.fire");
@@ -93,20 +90,20 @@ w_minigun_primary(void)
 	View_SetMuzzleflash(MUZZLE_RIFLE);
 #endif
 
-	Weapons_ViewPunchAngle([-2,0,0]);
+	Weapons_ViewPunchAngle(pl, [-2,0,0]);
 
 
 	pl.ammo_minigun--;
 
 	if (pl.menu_active == 1) {
-		Weapons_ViewAnimation(MG_FIRELOOP);
+		Weapons_ViewAnimation(pl, MG_FIRELOOP);
 #ifdef SERVER
 		TraceAttack_FireBullets(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.1,0.1], WEAPON_MINIGUN);
 #endif
 		pl.w_attack_next = 0.1f;
 		pl.w_idle_next = 0.1f;
 	} else {
-		Weapons_ViewAnimation(MG_FIRE);
+		Weapons_ViewAnimation(pl, MG_FIRE);
 #ifdef SERVER
 		TraceAttack_FireBullets(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.05,0.05], WEAPON_MINIGUN);
 #endif
@@ -116,9 +113,8 @@ w_minigun_primary(void)
 }
 
 void
-w_minigun_secondary(void)
+w_minigun_secondary(player pl)
 {
-	player pl = (player)self;
 	if (pl.w_attack_next) {
 		return;
 	}
@@ -132,9 +128,9 @@ w_minigun_secondary(void)
 #endif
 
 	if (pl.menu_active == 0) {
-		Weapons_ViewAnimation(MG_SPINUP);
+		Weapons_ViewAnimation(pl, MG_SPINUP);
 	} else {
-		Weapons_ViewAnimation(MG_SPINDOWN);
+		Weapons_ViewAnimation(pl, MG_SPINDOWN);
 	}
 
 	pl.menu_active = 1 - pl.menu_active;
@@ -156,7 +152,7 @@ w_minigun_wmodel(void)
 }
 
 string
-w_minigun_pmodel(void)
+w_minigun_pmodel(player pl)
 {
 	return "models/p_9mmar.mdl";
 }
@@ -168,16 +164,15 @@ w_minigun_deathmsg(void)
 }
 
 float
-w_minigun_aimanim(void)
+w_minigun_aimanim(player pl)
 {
 	return (0);
 }
 
 int
-w_minigun_pickup(int new, int startammo)
+w_minigun_pickup(player pl, int new, int startammo)
 {
 #ifdef SERVER
-	player pl = (player)self;
 
 	if (pl.ammo_minigun < 100) {
 		pl.ammo_minigun = bound(0, pl.ammo_minigun + 30, 100);
@@ -189,7 +184,7 @@ w_minigun_pickup(int new, int startammo)
 }
 
 void
-w_minigun_hud(void)
+w_minigun_hud(player pl)
 {
 #ifdef CLIENT
 	vector pos;
@@ -223,7 +218,7 @@ w_minigun_hud(void)
 }
 
 void
-w_minigun_hudpic(int selected, vector pos, float a)
+w_minigun_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -262,7 +257,7 @@ weapon_t w_minigun =
 	.secondary	= w_minigun_secondary,
 	.reload		= __NULL__,
 	.release	= w_minigun_release,
-	.crosshair	= w_minigun_hud,
+	.postdraw	= w_minigun_hud,
 	.precache	= w_minigun_precache,
 	.pickup		= w_minigun_pickup,
 	.updateammo	= w_minigun_updateammo,

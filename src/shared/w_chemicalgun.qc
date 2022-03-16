@@ -25,25 +25,23 @@ enum
 };
 
 void
-w_chemicalgun_draw(void)
+w_chemicalgun_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_chemgun.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(CHEMGUN_DRAW);
+	Weapons_ViewAnimation(pl, CHEMGUN_DRAW);
 }
 
 void
-w_chemicalgun_holster(void)
+w_chemicalgun_holster(player pl)
 {
 }
 
 void
-w_chemicalgun_primary(void)
+w_chemicalgun_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -52,7 +50,7 @@ w_chemicalgun_primary(void)
 	if (pl.a_ammo1 > 0) {
 		pl.a_ammo1 = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
-		Weapons_ViewAnimation(CHEMGUN_CONFIG);
+		Weapons_ViewAnimation(pl, CHEMGUN_CONFIG);
 		pl.w_attack_next = 2.08f;
 		pl.w_idle_next = pl.w_attack_next;
 		return;
@@ -62,10 +60,10 @@ w_chemicalgun_primary(void)
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef CLIENT
-	//Weapons_ViewAnimation(GP_FIRESINGLE);
+	//Weapons_ViewAnimation(pl, GP_FIRESINGLE);
 #endif
 
 	pl.w_attack_next = 0.15f;
@@ -73,9 +71,8 @@ w_chemicalgun_primary(void)
 }
 
 void
-w_chemicalgun_secondary(void)
+w_chemicalgun_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -96,15 +93,14 @@ w_chemicalgun_secondary(void)
 }
 
 void
-w_chemicalgun_release(void)
+w_chemicalgun_release(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
 	}
 
-	Weapons_ViewAnimation(CHEMGUN_IDLE);
+	Weapons_ViewAnimation(pl, CHEMGUN_IDLE);
 	pl.w_idle_next = 2.08f;
 }
 
@@ -121,7 +117,7 @@ w_chemicalgun_wmodel(void)
 }
 
 string
-w_chemicalgun_pmodel(void)
+w_chemicalgun_pmodel(player pl)
 {
 	return "models/p_hgun.mdl";
 }
@@ -133,16 +129,15 @@ w_chemicalgun_deathmsg(void)
 }
 
 float
-w_chemicalgun_aimanim(void)
+w_chemicalgun_aimanim(player pl)
 {
 	return (0);
 }
 
 int
-w_chemicalgun_pickup(int new, int startammo)
+w_chemicalgun_pickup(player pl, int new, int startammo)
 {
 #ifdef SERVER
-	player pl = (player)self;
 
 	if (new) {
 		pl.chem_acid = 5;
@@ -246,11 +241,10 @@ w_chemgun_drawpressure(vector pos, int length, vector col)
 #endif
 
 void
-w_chemicalgun_hud(void)
+w_chemicalgun_hud(player pl)
 {
 #ifdef CLIENT
 	vector pos;
-	player pl = (player)self;
 
 	pos = g_hudmins + [g_hudres[0] - 125, g_hudres[1] - 42];
 	for (int i = 0; i < 3; i++) {
@@ -316,7 +310,7 @@ w_chemicalgun_hud(void)
 }
 
 void
-w_chemicalgun_hudpic(int selected, vector pos, float a)
+w_chemicalgun_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -369,7 +363,7 @@ weapon_t w_chemicalgun =
 	.secondary	= w_chemicalgun_secondary,
 	.reload		= __NULL__,
 	.release	= w_chemicalgun_release,
-	.crosshair	= w_chemicalgun_hud,
+	.postdraw	= w_chemicalgun_hud,
 	.precache	= w_chemicalgun_precache,
 	.pickup		= w_chemicalgun_pickup,
 	.updateammo	= w_chemicalgun_updateammo,

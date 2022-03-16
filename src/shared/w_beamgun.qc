@@ -27,38 +27,35 @@ enum
 };
 
 void
-w_beamgun_draw(void)
+w_beamgun_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_beam.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(BEAMGUN_DRAW);
+	Weapons_ViewAnimation(pl, BEAMGUN_DRAW);
 }
 
 void
-w_beamgun_holster(void)
+w_beamgun_holster(player pl)
 {
 }
 
 void
-w_beamgun_release(void)
+w_beamgun_release(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
 	}
 
-	Weapons_ViewAnimation(BEAMGUN_IDLE);
+	Weapons_ViewAnimation(pl, BEAMGUN_IDLE);
 	pl.w_idle_next = 2.6f;
 }
 
 void
-w_beamgun_primary(void)
+w_beamgun_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -67,7 +64,7 @@ w_beamgun_primary(void)
 	if (pl.a_ammo1 > 0) {
 		pl.a_ammo1 = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
-		Weapons_ViewAnimation(BEAMGUN_CONFIG);
+		Weapons_ViewAnimation(pl, BEAMGUN_CONFIG);
 		pl.w_attack_next = 2.26087f;
 		pl.w_idle_next = 2.26087f;
 		return;
@@ -77,10 +74,10 @@ w_beamgun_primary(void)
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef CLIENT
-	//Weapons_ViewAnimation(GP_FIRESINGLE);
+	//Weapons_ViewAnimation(pl, GP_FIRESINGLE);
 #endif
 
 	pl.w_attack_next = 0.15f;
@@ -88,9 +85,8 @@ w_beamgun_primary(void)
 }
 
 void
-w_beamgun_secondary(void)
+w_beamgun_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -125,7 +121,7 @@ w_beamgun_wmodel(void)
 }
 
 string
-w_beamgun_pmodel(void)
+w_beamgun_pmodel(player pl)
 {
 	return "models/p_egon.mdl";
 }
@@ -137,13 +133,13 @@ w_beamgun_deathmsg(void)
 }
 
 float
-w_beamgun_aimanim(void)
+w_beamgun_aimanim(player pl)
 {
 	return (0);
 }
 
 void
-w_beamgun_hud(void)
+w_beamgun_hud(player pl)
 {
 #ifdef CLIENT
 	static string rmodes[] = {
@@ -170,7 +166,6 @@ w_beamgun_hud(void)
 		"BALL"
 	};
 	vector pos;
-	player pl = (player)self;
 
 	/* menu */
 	if (pl.a_ammo1 > 0) {
@@ -228,7 +223,7 @@ w_beamgun_hud(void)
 }
 
 void
-w_beamgun_hudpic(int selected, vector pos, float a)
+w_beamgun_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -267,7 +262,7 @@ weapon_t w_beamgun =
 	.secondary	= w_beamgun_secondary,
 	.reload		= __NULL__,
 	.release	= w_beamgun_release,
-	.crosshair	= w_beamgun_hud,
+	.postdraw	= w_beamgun_hud,
 	.precache	= w_beamgun_precache,
 	.pickup		= __NULL__,
 	.updateammo	= w_beamgun_updateammo,

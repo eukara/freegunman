@@ -27,25 +27,23 @@ enum
 };
 
 void
-w_grenade_draw(void)
+w_grenade_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_grenade.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(GREN_DRAW);
+	Weapons_ViewAnimation(pl, GREN_DRAW);
 }
 
 void
-w_grenade_holster(void)
+w_grenade_holster(player pl)
 {
 }
 
 void
-w_grenade_primary(void)
+w_grenade_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -54,7 +52,7 @@ w_grenade_primary(void)
 	if (pl.a_ammo1 > 0) {
 		pl.a_ammo1 = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
-		Weapons_ViewAnimation(GREN_FIDGET);
+		Weapons_ViewAnimation(pl, GREN_FIDGET);
 		pl.w_attack_next = 1.2f;
 		pl.w_idle_next = pl.w_attack_next;
 		return;
@@ -64,10 +62,10 @@ w_grenade_primary(void)
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef CLIENT
-	//Weapons_ViewAnimation(GP_FIRESINGLE);
+	//Weapons_ViewAnimation(pl, GP_FIRESINGLE);
 #endif
 
 	pl.w_attack_next = 0.15f;
@@ -75,9 +73,8 @@ w_grenade_primary(void)
 }
 
 void
-w_grenade_secondary(void)
+w_grenade_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -102,15 +99,14 @@ w_grenade_secondary(void)
 }
 
 void
-w_grenade_release(void)
+w_grenade_release(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
 	}
 
-	Weapons_ViewAnimation(GREN_IDLE1);
+	Weapons_ViewAnimation(pl, GREN_IDLE1);
 	pl.w_idle_next = 1.777778f;
 }
 
@@ -127,7 +123,7 @@ w_grenade_wmodel(void)
 }
 
 string
-w_grenade_pmodel(void)
+w_grenade_pmodel(player pl)
 {
 	return "models/p_grenade.mdl";
 }
@@ -139,17 +135,16 @@ w_grenade_deathmsg(void)
 }
 
 float
-w_grenade_aimanim(void)
+w_grenade_aimanim(player pl)
 {
 	return (0);
 }
 
 void
-w_grenade_hud(void)
+w_grenade_hud(player pl)
 {
 #ifdef CLIENT
 	vector pos;
-	player pl = (player)self;
 	
 	static string dmodes[] = {
 		"WHEN TRIPPED",
@@ -193,7 +188,7 @@ w_grenade_hud(void)
 }
 
 void
-w_grenade_hudpic(int selected, vector pos, float a)
+w_grenade_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -231,7 +226,7 @@ weapon_t w_grenade =
 	.secondary	= w_grenade_secondary,
 	.reload		= __NULL__,
 	.release	= w_grenade_release,
-	.crosshair	= w_grenade_hud,
+	.postdraw	= w_grenade_hud,
 	.precache	= w_grenade_precache,
 	.pickup		= __NULL__,
 	.updateammo	= w_grenade_updateammo,

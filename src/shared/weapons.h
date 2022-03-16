@@ -44,17 +44,17 @@ enum
 	WEIGHT_CHEMICALGUN
 };
 
-weapontype_t gunman_wpntype_ranged(void)
+weapontype_t gunman_wpntype_ranged(player pl)
 {
 	return WPNTYPE_RANGED;
 }
 
-weapontype_t gunman_wpntype_close(void)
+weapontype_t gunman_wpntype_close(player pl)
 {
 	return WPNTYPE_CLOSE;
 }
 
-weapontype_t gunman_wpntype_throw(void)
+weapontype_t gunman_wpntype_throw(player pl)
 {
 	return WPNTYPE_THROW;
 }

@@ -22,33 +22,31 @@ enum
 };
 
 void
-w_aicore_draw(void)
+w_aicore_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_aicore.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(AIC_DRAW);
+	Weapons_ViewAnimation(pl, AIC_DRAW);
 }
 
 void
-w_aicore_holster(void)
+w_aicore_holster(player pl)
 {
 }
 
 void
-w_aicore_primary(void)
+w_aicore_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 	if (pl.w_attack_next) {
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef CLIENT
-	//Weapons_ViewAnimation(GP_FIRESINGLE);
+	//Weapons_ViewAnimation(pl, GP_FIRESINGLE);
 #endif
 
 	pl.w_attack_next = 0.15f;
@@ -56,9 +54,8 @@ w_aicore_primary(void)
 }
 
 void
-w_aicore_release(void)
+w_aicore_release(player pl)
 {
-	player pl = (player)self;
 
 	pl.gflags |= GF_SEMI_TOGGLED;
 
@@ -66,7 +63,7 @@ w_aicore_release(void)
 		return;
 	}
 
-	Weapons_ViewAnimation(AIC_IDLE);
+	Weapons_ViewAnimation(pl, AIC_IDLE);
 	pl.w_idle_next = 1.777778f;
 }
 
@@ -83,7 +80,7 @@ w_aicore_wmodel(void)
 }
 
 string
-w_aicore_pmodel(void)
+w_aicore_pmodel(player pl)
 {
 	return "models/w_aicore.mdl";
 }
@@ -95,13 +92,13 @@ w_aicore_deathmsg(void)
 }
 
 float
-w_aicore_aimanim(void)
+w_aicore_aimanim(player pl)
 {
 	return (0);
 }
 
 void
-w_aicore_hudpic(int selected, vector pos, float a)
+w_aicore_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -134,7 +131,7 @@ weapon_t w_aicore =
 	.secondary	= __NULL__,
 	.reload		= __NULL__,
 	.release	= w_aicore_release,
-	.crosshair	= __NULL__,
+	.postdraw	= __NULL__,
 	.precache	= w_aicore_precache,
 	.pickup		= __NULL__,
 	.updateammo	= w_aicore_updateammo,

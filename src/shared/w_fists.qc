@@ -50,30 +50,27 @@ w_fists_updateammo(player pl)
 }
 
 void
-w_fists_draw(void)
+w_fists_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
-	player pl = (player)self;
 	Weapons_SetModel("models/v_hands.mdl");
 	Weapons_SetGeomset("geomset 1 2\n");
-	Weapons_ViewAnimation(KNIFE_DRAW);
+	Weapons_ViewAnimation(pl, KNIFE_DRAW);
 #ifdef SERVER
 	Sound_Play(pl, CHAN_WEAPON, "weapon_fists.knifedraw");
 #endif
 }
 
 void
-w_fists_holster(void)
+w_fists_holster(player pl)
 {
-	Weapons_ViewAnimation(KNIFE_HOLSTER);
+	Weapons_ViewAnimation(pl, KNIFE_HOLSTER);
 }
 
 void
-w_fists_release(void)
+w_fists_release(player pl)
 {
 	int r;
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
@@ -83,14 +80,14 @@ w_fists_release(void)
 #ifdef SERVER
 		Sound_Play(pl, CHAN_WEAPON, "weapon_fists.knifedraw");
 #endif
-		Weapons_ViewAnimation(KNIFE_DRAW);
+		Weapons_ViewAnimation(pl, KNIFE_DRAW);
 		Weapons_SetGeomset("geomset 1 2\n");
 		pl.a_ammo3 = HS_KNIFE;
 		pl.w_attack_next = 0.75f;
 		pl.w_idle_next = pl.w_attack_next;
 		return;
 	} else if (pl.a_ammo3 == HS_KNIFE_TO_FISTS) {
-		Weapons_ViewAnimation(FISTS_DRAW);
+		Weapons_ViewAnimation(pl, FISTS_DRAW);
 		Weapons_SetGeomset("geomset 1 1\n");
 		pl.a_ammo3 = HS_FISTS;
 		pl.w_attack_next = 1.4f;
@@ -105,11 +102,11 @@ w_fists_release(void)
 		case 1:
 		case 2:
 		case 3:
-			Weapons_ViewAnimation(KNIFE_IDLE);
+			Weapons_ViewAnimation(pl, KNIFE_IDLE);
 			pl.w_idle_next = 10.0f;
 			break;
 		default:
-			Weapons_ViewAnimation(KNIFE_FIDGET);
+			Weapons_ViewAnimation(pl, KNIFE_FIDGET);
 			pl.w_idle_next = 2.0f;
 		}
 	} else {
@@ -118,24 +115,23 @@ w_fists_release(void)
 		case 0:
 		case 1:
 		case 2:
-			Weapons_ViewAnimation(FISTS_IDLE);
+			Weapons_ViewAnimation(pl, FISTS_IDLE);
 			pl.w_idle_next = 10.0f;
 			break;
 		case 3:
-			Weapons_ViewAnimation(FISTS_FIDGET1);
+			Weapons_ViewAnimation(pl, FISTS_FIDGET1);
 			pl.w_idle_next = 3.0f;
 			break;
 		default:
-			Weapons_ViewAnimation(FISTS_FIDGET2);
+			Weapons_ViewAnimation(pl, FISTS_FIDGET2);
 			pl.w_idle_next = 2.333333f;
 		}
 	}
 }
 
 void
-w_fists_primary(void)
+w_fists_primary(player pl)
 {
-	player pl = (player)self;
 	if (pl.w_attack_next) {
 		return;
 	}
@@ -147,16 +143,16 @@ w_fists_primary(void)
 		Sound_Play(pl, 8, "weapon_fists.missknife");
 		#endif
 		if (pl.a_ammo1 == 1) {
-			Weapons_ViewAnimation(KNIFE_ATTACK1);
+			Weapons_ViewAnimation(pl, KNIFE_ATTACK1);
 		} else {
-			Weapons_ViewAnimation(KNIFE_ATTACK2);
+			Weapons_ViewAnimation(pl, KNIFE_ATTACK2);
 		}
 
 #ifdef SERVER
-		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 96),\
+		traceline(Weapons_GetCameraPos(pl), Weapons_GetCameraPos(pl) + (v_forward * 96),\
 			FALSE, pl);
 		if (trace_ent && trace_fraction <= 1.0) {
-			if (trace_ent.takedamage = DAMAGE_YES) {
+			if (trace_ent.takedamage == DAMAGE_YES) {
 				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_knife1_d", 25), WEAPON_GAUSSPISTOL, DMG_GENERIC);
 			}
 		}
@@ -166,22 +162,22 @@ w_fists_primary(void)
 		pl.w_idle_next = pl.w_attack_next;
 	} else {
 		if (pl.a_ammo1 == 1) {
-			Weapons_ViewAnimation(FISTS_RIGHT);
+			Weapons_ViewAnimation(pl, FISTS_RIGHT);
 			#ifdef SERVER
 			Sound_Play(pl, CHAN_WEAPON, "weapon_fists.hitright");
 			#endif
 		} else {
-			Weapons_ViewAnimation(FISTS_LEFT);
+			Weapons_ViewAnimation(pl, FISTS_LEFT);
 			#ifdef SERVER
 			Sound_Play(pl, CHAN_WEAPON, "weapon_fists.hitleft");
 			#endif
 		}
 
 #ifdef SERVER
-		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 96),\
+		traceline(Weapons_GetCameraPos(pl), Weapons_GetCameraPos(pl) + (v_forward * 96),\
 			FALSE, pl);
 		if (trace_ent && trace_fraction <= 1.0) {
-			if (trace_ent.takedamage = DAMAGE_YES) {
+			if (trace_ent.takedamage == DAMAGE_YES) {
 				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_twohandpunch_d", 10), WEAPON_GAUSSPISTOL, DMG_GENERIC);
 			}
 		}
@@ -193,22 +189,21 @@ w_fists_primary(void)
 }
 
 void
-w_fists_secondary(void)
+w_fists_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_attack_next) {
-		w_fists_release();
+		w_fists_release(pl);
 		return;
 	}
 
 	if (pl.a_ammo3 == HS_KNIFE) {
-		Weapons_ViewAnimation(KNIFE_HOLSTER);
+		Weapons_ViewAnimation(pl, KNIFE_HOLSTER);
 		pl.a_ammo3 = HS_KNIFE_TO_FISTS;
 		pl.w_attack_next = 0.75f;
 		pl.w_idle_next = pl.w_attack_next;
 	} else if (pl.a_ammo3 == HS_FISTS) {
-		Weapons_ViewAnimation(FISTS_HOLSTER);
+		Weapons_ViewAnimation(pl, FISTS_HOLSTER);
 		pl.a_ammo3 = HS_FISTS_TO_KNIFE;
 		pl.w_attack_next = 0.7f;
 		pl.w_idle_next = pl.w_attack_next;
@@ -222,7 +217,7 @@ w_fists_wmodel(void)
 }
 
 string
-w_fists_pmodel(void)
+w_fists_pmodel(player pl)
 {
 /*	if (pl.a_ammo3 == HS_KNIFE) {
 		return "";
@@ -239,16 +234,15 @@ w_fists_deathmsg(void)
 }
 
 float
-w_fists_aimanim(void)
+w_fists_aimanim(player pl)
 {
 	return (0);
 }
 
 int
-w_fists_pickup(int new, int startammo)
+w_fists_pickup(player pl, int new, int startammo)
 {
 #ifdef SERVER
-	player pl = (player)self;
 
 	if (pl.ammo_minigun < 100) {
 		pl.ammo_minigun = bound(0, pl.ammo_minigun + 30, 100);
@@ -260,7 +254,7 @@ w_fists_pickup(int new, int startammo)
 }
 
 void
-w_fists_hudpic(int selected, vector pos, float a)
+w_fists_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -300,7 +294,7 @@ weapon_t w_fists =
 	.secondary	= w_fists_secondary,
 	.reload		= __NULL__,
 	.release	= w_fists_release,
-	.crosshair	= __NULL__,
+	.postdraw	= __NULL__,
 	.precache	= w_fists_precache,
 	.pickup		= __NULL__,
 	.updateammo	= w_fists_updateammo,

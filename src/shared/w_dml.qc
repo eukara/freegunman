@@ -73,25 +73,23 @@ enum
 
 /* functions */
 void
-w_dml_draw(void)
+w_dml_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_dml.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(DML_DRAW);
+	Weapons_ViewAnimation(pl, DML_DRAW);
 }
 
 void
-w_dml_holster(void)
+w_dml_holster(player pl)
 {
 
 }
 
 void
-w_dml_release(void)
+w_dml_release(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
@@ -99,9 +97,9 @@ w_dml_release(void)
 	
 	if (pl.dml_state == DS_RELOADING) {
 		if (pl.menu_active == 1) {
-			Weapons_ViewAnimation(DML_RELOADRIGHT);
+			Weapons_ViewAnimation(pl, DML_RELOADRIGHT);
 		} else {
-			Weapons_ViewAnimation(DML_RELOADLEFT);
+			Weapons_ViewAnimation(pl, DML_RELOADLEFT);
 		}
 #ifdef SERVER
 		Sound_Play(pl, CHAN_WEAPON, "weapon_dml.reload");
@@ -118,20 +116,43 @@ w_dml_release(void)
 	case 1:
 	case 2:
 	case 3:
-		Weapons_ViewAnimation(DML_IDLE);
+		Weapons_ViewAnimation(pl, DML_IDLE);
 		pl.w_idle_next = 10.0f;
 		break;
 	default:
-		Weapons_ViewAnimation(DML_FIDGET);
+		Weapons_ViewAnimation(pl, DML_FIDGET);
 		pl.w_idle_next = 2.0f;
 	}
 }
 
+#ifdef SERVER
 void
-w_dml_primary(void)
+w_dml_firerocket(player pl)
+{
+	static void w_dml_rocket_impact(entity target, entity source) {
+		Damage_Apply(target, source.owner, Skill_GetValue("sk_gaussfast_d", 13), WEAPON_GAUSSPISTOL, DMG_GENERIC);
+	}
+
+	NSProjectile ball = spawn(NSProjectile);
+	ball.SetModel("models/rocket.mdl");
+	ball.SetAngles(self.v_angle);
+	ball.SetScale(0.25f);
+	ball.SetRenderMode(RM_ADDITIVE);
+	ball.SetOwner(pl);
+
+
+	ball.SetImpact(w_dml_rocket_impact);
+
+	makevectors(pl.v_angle);
+	ball.SetOrigin(Weapons_GetCameraPos(pl) + (v_forward * 8));
+	ball.SetVelocity(v_forward * 500);
+}
+#endif
+
+void
+w_dml_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -140,7 +161,7 @@ w_dml_primary(void)
 	if (pl.menu_active > 0) {
 		pl.menu_active = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
-		Weapons_ViewAnimation(DML_CUSTOMIZE);
+		Weapons_ViewAnimation(pl, DML_CUSTOMIZE);
 #ifdef SERVER
 		Sound_Play(pl, 8, "weapon_dml.customize");
 #endif
@@ -154,26 +175,27 @@ w_dml_primary(void)
 	}
 
 	if (pl.dml_state == DS_RELOADING) {
-		w_dml_release();
+		w_dml_release(pl);
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef SERVER
+	w_dml_firerocket(pl);
 	Sound_Play(pl, CHAN_WEAPON, "weapon_dml.fire");
 #endif
 
-	Weapons_ViewAnimation(DML_FIRE);
+	Weapons_ViewAnimation(pl, DML_FIRE);
+
 	pl.w_attack_next = 1.222222f;
 	pl.w_idle_next = 1.222222f;
 	pl.dml_state = DS_RELOADING;
 }
 
 void
-w_dml_secondary(void)
+w_dml_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -206,7 +228,7 @@ w_dml_wmodel(void)
 }
 
 string
-w_dml_pmodel(void)
+w_dml_pmodel(player pl)
 {
 	return "models/p_crossbow.mdl";
 }
@@ -218,16 +240,15 @@ w_dml_deathmsg(void)
 }
 
 float
-w_dml_aimanim(void)
+w_dml_aimanim(player pl)
 {
 	return (0);
 }
 
 int
-w_dml_pickup(int new, int startammo)
+w_dml_pickup(player pl, int new, int startammo)
 {
 #ifdef SERVER
-	player pl = (player)self;
 
 	if (pl.ammo_rocket < 100) {
 		pl.ammo_rocket = bound(0, pl.ammo_rocket + 2, 100);
@@ -239,7 +260,7 @@ w_dml_pickup(int new, int startammo)
 }
 
 void
-w_dml_hud(void)
+w_dml_hud(player pl)
 {
 #ifdef CLIENT
 	static string lmodes[] = {
@@ -264,11 +285,11 @@ w_dml_hud(void)
 	vector pos;
 	vector jitter;
 	float lerp;
-	player pl = (player)self;
 	
 	/* laser */
-	Weapons_MakeVectors();
-	vector src = Weapons_GetCameraPos();
+	if (pl.dml_flightpath == FLIGHTPATH_GUIDED) {
+	Weapons_MakeVectors(pl);
+	vector src = Weapons_GetCameraPos(pl);
 	traceline(src, src + (v_forward * 256), FALSE, pl);
 	lerp = Math_Lerp(18,6, trace_fraction);
 	jitter[0] = (random(0,2) - 2) * (1 - trace_fraction);
@@ -284,6 +305,7 @@ w_dml_hud(void)
 		1.0f,
 		DRAWFLAG_ADDITIVE
 	);
+	}
 
 	/* menu */
 	if (pl.menu_active > 0) {
@@ -344,7 +366,7 @@ w_dml_hud(void)
 }
 
 void
-w_dml_hudpic(int selected, vector pos, float a)
+w_dml_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -389,7 +411,7 @@ weapon_t w_dml =
 	.secondary	= w_dml_secondary,
 	.reload		= __NULL__,
 	.release	= w_dml_release,
-	.crosshair	= w_dml_hud,
+	.postdraw	= w_dml_hud,
 	.precache	= w_dml_precache,
 	.pickup		= w_dml_pickup,
 	.updateammo	= w_dml_updateammo,

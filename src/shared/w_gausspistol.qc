@@ -40,25 +40,23 @@ enum
 };
 
 void
-w_gausspistol_draw(void)
+w_gausspistol_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_guasspistol.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(GP_DRAW);
+	Weapons_ViewAnimation(pl, GP_DRAW);
 }
 
 void
-w_gausspistol_holster(void)
+w_gausspistol_holster(player pl)
 {
-	Weapons_ViewAnimation(GP_HOLSTER);
+	Weapons_ViewAnimation(pl, GP_HOLSTER);
 }
 
 void
-w_gausspistol_release(void)
+w_gausspistol_release(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
@@ -70,11 +68,11 @@ w_gausspistol_release(void)
 	case 1:
 	case 2:
 	case 3:
-		Weapons_ViewAnimation(GP_IDLE1);
+		Weapons_ViewAnimation(pl, GP_IDLE1);
 		pl.w_idle_next = 3.75f;
 		break;
 	default:
-		Weapons_ViewAnimation(GP_IDLE2);
+		Weapons_ViewAnimation(pl, GP_IDLE2);
 		pl.w_idle_next = 3.0f;
 	}
 }
@@ -119,11 +117,10 @@ w_gausspistol_firerapid(vector pos, player pl)
 #endif
 
 void
-w_gausspistol_primary(void)
+w_gausspistol_primary(player pl)
 {
 	vector src;
 	int take = 1;
-	player pl = (player)self;
 
 	if (pl.menu_active > 0) {
 		pl.menu_active = 0;
@@ -157,9 +154,9 @@ w_gausspistol_primary(void)
 
 	switch (pl.gauss_mode) {
 	case GM_FAST:
-		Weapons_ViewAnimation(GP_FIREFAST);
+		Weapons_ViewAnimation(pl, GP_FIREFAST);
 #ifdef SERVER
-		w_gausspistol_firerapid(Weapons_GetCameraPos(), pl);
+		w_gausspistol_firerapid(Weapons_GetCameraPos(pl), pl);
 		Sound_Play(pl, CHAN_WEAPON, "weapon_gausspistol.firefast");
 #endif
 		pl.w_attack_next = 0.1f;
@@ -167,9 +164,9 @@ w_gausspistol_primary(void)
 		break;
 	case GM_CHARGE:
 		take = 10;
-		Weapons_ViewAnimation(GP_FIRECHARGE);
+		Weapons_ViewAnimation(pl, GP_FIRECHARGE);
 #ifdef SERVER
-		w_gausspistol_firecharge(Weapons_GetCameraPos(), pl);
+		w_gausspistol_firecharge(Weapons_GetCameraPos(pl), pl);
 		Sound_Play(pl, CHAN_WEAPON, "weapon_gausspistol.firecharge");
 		Sound_Play(pl, 8, "weapon_gausspistol.charge");
 #endif
@@ -178,9 +175,9 @@ w_gausspistol_primary(void)
 		break;
 	default:
 		pl.gflags |= GF_SEMI_TOGGLED;
-		Weapons_ViewAnimation(GP_FIRESINGLE);
+		Weapons_ViewAnimation(pl, GP_FIRESINGLE);
 #ifdef SERVER
-		traceline(Weapons_GetCameraPos(), Weapons_GetCameraPos() + (v_forward * 1024),\
+		traceline(Weapons_GetCameraPos(pl), Weapons_GetCameraPos(pl) + (v_forward * 1024),\
 			FALSE, pl);
 
 		if (trace_fraction <= 1.0) {
@@ -189,7 +186,7 @@ w_gausspistol_primary(void)
 			}
 
 		}
-		FX_GaussBeam(Weapons_GetCameraPos(), input_angles, pl);
+		FX_GaussBeam(Weapons_GetCameraPos(pl), input_angles, pl);
 		Sound_Play(pl, CHAN_WEAPON, "weapon_gausspistol.firesingle");
 #endif
 		pl.w_attack_next = 0.15f;
@@ -197,20 +194,19 @@ w_gausspistol_primary(void)
 		break;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 #ifdef CLIENT
 	View_SetMuzzleflash(MUZZLE_WEIRD);
 #endif
 
 	pl.ammo_gauss -= take;
-	Weapons_ViewPunchAngle([-5,0,0]);
+	Weapons_ViewPunchAngle(pl, [-5,0,0]);
 }
 
 void
-w_gausspistol_secondary(void)
+w_gausspistol_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -220,7 +216,7 @@ w_gausspistol_secondary(void)
 
 	/* activate menu */
 	pl.menu_active = 1;
-	w_gausspistol_release();
+	w_gausspistol_release(pl);
 }
 
 void
@@ -236,7 +232,7 @@ w_gausspistol_wmodel(void)
 }
 
 string
-w_gausspistol_pmodel(void)
+w_gausspistol_pmodel(player pl)
 {
 	return "models/p_357.mdl";
 }
@@ -248,16 +244,15 @@ w_gausspistol_deathmsg(void)
 }
 
 float
-w_gausspistol_aimanim(void)
+w_gausspistol_aimanim(player pl)
 {
 	return (0);
 }
 
 int
-w_gausspistol_pickup(int new, int startammo)
+w_gausspistol_pickup(player pl, int new, int startammo)
 {
 #ifdef SERVER
-	player pl = (player)self;
 
 	if (pl.ammo_gauss < 150) {
 		pl.ammo_gauss = bound(0, pl.ammo_gauss + 35, 150);
@@ -269,11 +264,10 @@ w_gausspistol_pickup(int new, int startammo)
 }
 
 void
-w_gausspistol_hud(void)
+w_gausspistol_hud(player pl)
 {
 #ifdef CLIENT
 	vector pos;
-	player pl = (player)self;
 
 	pos = g_hudmins + [g_hudres[0] - 125, g_hudres[1] - 42];
 	for (int i = 0; i < 3; i++) {
@@ -389,7 +383,7 @@ w_gausspistol_hud(void)
 }
 
 void
-w_gausspistol_hudpic(int selected, vector pos, float a)
+w_gausspistol_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -433,7 +427,7 @@ weapon_t w_gausspistol =
 	.secondary	= w_gausspistol_secondary,
 	.reload		= __NULL__,
 	.release	= w_gausspistol_release,
-	.crosshair	= w_gausspistol_hud,
+	.postdraw	= w_gausspistol_hud,
 	.precache	= w_gausspistol_precache,
 	.pickup		= w_gausspistol_pickup,
 	.updateammo	= w_gausspistol_updateammo,

@@ -279,6 +279,7 @@ HUD_WeaponPickupNotify(int w)
 void
 HUD_Draw(void)
 {
+	player pl = (player)pSeat->m_ePlayer;
 	g_hud_color = autocvar_con_color * (1 / 255);
 
 	Textmenu_Draw();
@@ -286,7 +287,7 @@ HUD_Draw(void)
 	Damage_Draw();
 	HUD_DamageNotify_Draw();
 	HUD_DrawHealth();
-	Weapons_DrawCrosshair();
+	Weapons_DrawCrosshair(pl);
 	HUD_DrawWeaponSelect();
 }
 

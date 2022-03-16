@@ -49,26 +49,24 @@ string gsmodes[] = {
 #endif
 
 void
-w_shotgun_draw(void)
+w_shotgun_draw(player pl)
 {
-	player pl = (player)self;
 	pl.menu_active = 0;
 	Weapons_SetModel("models/v_shotgun.mdl");
 	Weapons_SetGeomset("geomset 1 1\n");
-	Weapons_ViewAnimation(SHOTGUN_DRAW);
+	Weapons_ViewAnimation(pl, SHOTGUN_DRAW);
 }
 
 void
-w_shotgun_holster(void)
+w_shotgun_holster(player pl)
 {
-	Weapons_ViewAnimation(SHOTGUN_DRAW);
+	Weapons_ViewAnimation(pl, SHOTGUN_DRAW);
 }
 
 void
-w_shotgun_primary(void)
+w_shotgun_primary(player pl)
 {
 	vector src;
-	player pl = (player)self;
 
 	if (pl.gflags & GF_SEMI_TOGGLED) {
 		return;
@@ -77,7 +75,7 @@ w_shotgun_primary(void)
 	if (pl.menu_active > 0) {
 		pl.menu_active = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
-		Weapons_ViewAnimation(SHOTGUN_CUSTOMIZE);
+		Weapons_ViewAnimation(pl, SHOTGUN_CUSTOMIZE);
 		pl.w_attack_next = 2.25f;
 		pl.w_idle_next = 2.25f;
 		return;
@@ -87,7 +85,7 @@ w_shotgun_primary(void)
 		return;
 	}
 
-	src = Weapons_GetCameraPos();
+	src = Weapons_GetCameraPos(pl);
 
 	pl.velocity += v_forward * -128;
 
@@ -114,21 +112,21 @@ w_shotgun_primary(void)
 	View_SetMuzzleflash(MUZZLE_SMALL);
 #endif
 
-	Weapons_ViewPunchAngle([-5,0,0]);
+	Weapons_ViewPunchAngle(pl, [-5,0,0]);
 
 	int r  = floor(pseudorandom() * 4.0);
 	switch (r) {
 	case 0:
-		Weapons_ViewAnimation(SHOTGUN_SHOOT1);
+		Weapons_ViewAnimation(pl, SHOTGUN_SHOOT1);
 		break;
 	case 1:
-		Weapons_ViewAnimation(SHOTGUN_SHOOT2);
+		Weapons_ViewAnimation(pl, SHOTGUN_SHOOT2);
 		break;
 	case 2:
-		Weapons_ViewAnimation(SHOTGUN_SHOOT3);
+		Weapons_ViewAnimation(pl, SHOTGUN_SHOOT3);
 		break;
 	default:
-		Weapons_ViewAnimation(SHOTGUN_SHOOT4);
+		Weapons_ViewAnimation(pl, SHOTGUN_SHOOT4);
 	}
 
 	pl.w_attack_next = 0.846154f;
@@ -136,9 +134,8 @@ w_shotgun_primary(void)
 }
 
 void
-w_shotgun_secondary(void)
+w_shotgun_secondary(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_attack_next) {
 		return;
@@ -163,9 +160,8 @@ w_shotgun_secondary(void)
 }
 
 void
-w_shotgun_release(void)
+w_shotgun_release(player pl)
 {
-	player pl = (player)self;
 
 	if (pl.w_idle_next) {
 		return;
@@ -177,11 +173,11 @@ w_shotgun_release(void)
 	case 1:
 	case 2:
 	case 3:
-		Weapons_ViewAnimation(SHOTGUN_IDLE);
+		Weapons_ViewAnimation(pl, SHOTGUN_IDLE);
 		pl.w_idle_next = 10.0f;
 		break;
 	default:
-		Weapons_ViewAnimation(SHOTGUN_FIDGET);
+		Weapons_ViewAnimation(pl, SHOTGUN_FIDGET);
 		pl.w_idle_next = 2.0f;
 	}
 }
@@ -199,7 +195,7 @@ w_shotgun_wmodel(void)
 }
 
 string
-w_shotgun_pmodel(void)
+w_shotgun_pmodel(player pl)
 {
 	return "models/p_shotgun.mdl";
 }
@@ -211,16 +207,15 @@ w_shotgun_deathmsg(void)
 }
 
 float
-w_shotgun_aimanim(void)
+w_shotgun_aimanim(player pl)
 {
 	return (0);
 }
 
 int
-w_shotgun_pickup(int new, int startammo)
+w_shotgun_pickup(player pl, int new, int startammo)
 {
 #ifdef SERVER
-	player pl = (player)self;
 
 	if (new) {
 		pl.shotgun_shells = 2;
@@ -237,11 +232,10 @@ w_shotgun_pickup(int new, int startammo)
 }
 
 void
-w_shotgun_hud(void)
+w_shotgun_hud(player pl)
 {
 #ifdef CLIENT
 	vector pos;
-	player pl = (player)self;
 
 	pos = g_hudmins + [g_hudres[0] - 125, g_hudres[1] - 42];
 	for (int i = 0; i < 3; i++) {
@@ -301,7 +295,7 @@ w_shotgun_hud(void)
 }
 
 void
-w_shotgun_hudpic(int selected, vector pos, float a)
+w_shotgun_hudpic(player pl, int selected, vector pos, float a)
 {
 #ifdef CLIENT
 	drawpic(
@@ -339,7 +333,7 @@ weapon_t w_shotgun =
 	.secondary	= w_shotgun_secondary,
 	.reload		= __NULL__,
 	.release	= w_shotgun_release,
-	.crosshair	= w_shotgun_hud,
+	.postdraw	= w_shotgun_hud,
 	.precache	= w_shotgun_precache,
 	.pickup		= w_shotgun_pickup,
 	.updateammo	= w_shotgun_updateammo,
