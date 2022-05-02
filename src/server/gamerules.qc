@@ -16,6 +16,13 @@
 
 var int autocvar_sv_playerkeepalive = TRUE;
 
+
+bool
+HLGameRules::IsMultiplayer(void)
+{
+	return false;
+}
+
 void
 HLGameRules::LevelDecodeParms(base_player pp)
 {
