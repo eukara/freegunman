@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-class monster_human_demoman:CBaseNPC
+class monster_human_demoman:NSTalkMonster
 {
 	void(void) monster_human_demoman;
 };
@@ -25,5 +25,5 @@ monster_human_demoman::monster_human_demoman(void)
 	model = "models/demolitionman.mdl";
 	base_mins = [-16,-16,0];
 	base_maxs = [16,16,72];
-	CBaseNPC::CBaseNPC();
+	NSTalkMonster::NSTalkMonster();
 }

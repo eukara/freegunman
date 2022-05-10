@@ -14,8 +14,10 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-class CBaseDecor:CBaseEntity
+class CBaseDecor:NSRenderableEntity
 {
+	void(void) CBaseDecor;
+
 	int m_iBody;
 	virtual void(string, string) SpawnKey;
 };
@@ -37,9 +39,15 @@ CBaseDecor::SpawnKey(string strField, string strKey)
 			m_iBody = stoi(strKey);
 			break;
 		default:
-			CBaseEntity::SpawnKey(strField, strKey);
+			super::SpawnKey(strField, strKey);
 			break;
 	}
+}
+
+void
+CBaseDecor::CBaseDecor(void)
+{
+	super::NSRenderableEntity();
 }
 
 /* Let's begin */
@@ -155,7 +163,7 @@ class decore_spacedebris:CBaseDecor
 				model = strKey;
 				break;
 			default:
-				CBaseEntity::SpawnKey(strField, strKey);
+				super::SpawnKey(strField, strKey);
 				break;
 		}
 	};

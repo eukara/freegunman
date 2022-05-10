@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-class hologram_damage:CBaseNPC
+class hologram_damage:NSTalkMonster
 {
 	int m_iType;
 
@@ -51,7 +51,7 @@ hologram_damage::SpawnKey(string strKey, string strValue)
 		m_iType = stoi(strValue);
 		break;
 	default:
-		CBaseNPC::SpawnKey(strKey, strValue);
+		NSTalkMonster::SpawnKey(strKey, strValue);
 	}
 }
 
@@ -60,5 +60,5 @@ hologram_damage::hologram_damage(void)
 {
 	base_mins = [-16,-16,0];
 	base_maxs = [16,16,72];
-	CBaseNPC::CBaseNPC();
+	NSTalkMonster::NSTalkMonster();
 }

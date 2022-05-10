@@ -14,7 +14,7 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-class monster_human_unarmed:CBaseNPC
+class monster_human_unarmed:NSTalkMonster
 {
 	void(void) monster_human_unarmed;
 };
@@ -25,5 +25,5 @@ monster_human_unarmed::monster_human_unarmed(void)
 	model = "models/gunmantrooper.mdl";
 	base_mins = [-16,-16,0];
 	base_maxs = [16,16,72];
-	CBaseNPC::CBaseNPC();
+	NSTalkMonster::NSTalkMonster();
 }
