@@ -144,9 +144,9 @@ class decore_torch:CBaseDecor
 		setmodel(flame, "sprites/torch.spr");
 		flame.effects = EF_ADDITIVE;
 		flame.drawmask = MASK_ENGINE;
-		flame.maxframe = modelframecount(flame.modelindex);
-		flame.loops = 1;
-		flame.framerate = 10;
+		flame.SetMaxFrame(modelframecount(flame.modelindex));
+		flame.SetLoopFlag(true);
+		flame.SetFramerate(10);
 		flame.nextthink = time + 0.05f;
 	};
 };
