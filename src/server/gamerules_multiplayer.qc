@@ -20,6 +20,18 @@ HLMultiplayerRules::IsMultiplayer(void)
 	return true;
 }
 
+bool
+HLMultiplayerRules::IsTeamplay(void)
+{
+	return false;
+}
+
+void
+HLMultiplayerRules::InitPostEnts(void)
+{
+
+}
+
 void
 HLMultiplayerRules::FrameStart(void)
 {
@@ -153,7 +165,7 @@ HLMultiplayerRules::PlayerSpawn(NSClientPlayer pp)
 	Client_FixAngle(pl, pl.angles);
 }
 
-float
+bool
 HLMultiplayerRules::ConsoleCommand(NSClientPlayer pp, string cmd)
 {
 	tokenize(cmd);
@@ -169,7 +181,7 @@ HLMultiplayerRules::ConsoleCommand(NSClientPlayer pp, string cmd)
 	return (1);
 }
 
-int
+bool
 HLMultiplayerRules::MonstersSpawn(void)
 {
 	return (FALSE);
