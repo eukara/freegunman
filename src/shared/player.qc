@@ -56,6 +56,7 @@ class player:NSClientPlayer
 	PREDICTED_INT(ammo_gauss); /* gauspistol */
 	PREDICTED_INT(ammo_minigun); /* minigun */
 	PREDICTED_INT(ammo_buckshot); /* shotgun */
+
 	PREDICTED_INT(fist_mode); /* knife/fists */
 	PREDICTED_INT(gauss_mode);
 	PREDICTED_INT(shotgun_shells);

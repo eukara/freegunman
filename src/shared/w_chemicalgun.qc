@@ -47,8 +47,8 @@ w_chemicalgun_primary(player pl)
 		return;
 	}
 
-	if (pl.a_ammo1 > 0) {
-		pl.a_ammo1 = 0;
+	if (pl.menu_active > 0) {
+		pl.menu_active = 0;
 		pl.gflags |= GF_SEMI_TOGGLED;
 		Weapons_ViewAnimation(pl, CHEMGUN_CONFIG);
 		pl.w_attack_next = 2.08f;
@@ -85,10 +85,10 @@ w_chemicalgun_secondary(player pl)
 	}
 
 	/* activate menu */
-	if (pl.a_ammo1 <= 0 || pl.a_ammo1 == 4) {
-		pl.a_ammo1 = 1;
+	if (pl.menu_active <= 0 || pl.menu_active == 4) {
+		pl.menu_active = 1;
 	} else {
-		pl.a_ammo1 = bound(1, pl.a_ammo1 + 1, 4);
+		pl.menu_active = bound(1, pl.menu_active + 1, 4);
 	}
 }
 
@@ -107,7 +107,7 @@ w_chemicalgun_release(player pl)
 void
 w_chemicalgun_updateammo(player pl)
 {
-	
+	Weapons_UpdateAmmo(pl, -1, pl.ammo_chem, -1);
 }
 
 string
@@ -262,12 +262,12 @@ w_chemicalgun_hud(player pl)
 	HUD_DrawAmmo2();
 
 	/* menu */
-	if (pl.a_ammo1 > 0) {
+	if (pl.menu_active > 0) {
 		vector col1, col2, col3, col4;
 		string txt1, txt2, txt3, txt4;
 		
 		col1 = col2 = col3 = col4 = [1,1,1];
-		switch (pl.a_ammo1) {
+		switch (pl.menu_active) {
 		case 1:
 			col1 = [0,1,0];
 			break;
@@ -388,11 +388,11 @@ weapon_SPchemicalgun(void)
 int
 w_chemgun_hudforward(player pl)
 {
-	if (pl.a_ammo1 <= 0) {
+	if (pl.menu_active <= 0) {
 		return (1);
 	}
 
-	switch (pl.a_ammo1) {
+	switch (pl.menu_active) {
 	case 1:
 		sendevent("w_chem_a", "i", 1i);
 		break;
@@ -412,11 +412,11 @@ w_chemgun_hudforward(player pl)
 int
 w_chemgun_hudback(player pl)
 {
-	if (pl.a_ammo1 <= 0) {
+	if (pl.menu_active <= 0) {
 		return (1);
 	}
 
-	switch (pl.a_ammo1) {
+	switch (pl.menu_active) {
 	case 1:
 		sendevent("w_chem_a", "i", -1i);
 		break;

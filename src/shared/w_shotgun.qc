@@ -68,9 +68,8 @@ w_shotgun_primary(player pl)
 {
 	vector src;
 
-	if (pl.gflags & GF_SEMI_TOGGLED) {
+	if (pl.gflags & GF_SEMI_TOGGLED)
 		return;
-	}
 
 	if (pl.menu_active > 0) {
 		pl.menu_active = 0;
@@ -81,9 +80,10 @@ w_shotgun_primary(player pl)
 		return;
 	}
 
-	if (pl.w_attack_next) {
+	if ((pl.ammo_buckshot - pl.shotgun_shells) < 0)
 		return;
-	}
+	if (pl.w_attack_next)
+		return;
 
 	src = Weapons_GetCameraPos(pl);
 
@@ -129,6 +129,7 @@ w_shotgun_primary(player pl)
 		Weapons_ViewAnimation(pl, SHOTGUN_SHOOT4);
 	}
 
+	pl.ammo_buckshot -= pl.shotgun_shells;
 	pl.w_attack_next = 0.846154f;
 	pl.w_idle_next = 2.5f;
 }
@@ -136,14 +137,10 @@ w_shotgun_primary(player pl)
 void
 w_shotgun_secondary(player pl)
 {
-
-	if (pl.w_attack_next) {
+	if (pl.w_attack_next)
 		return;
-	}
-
-	if (pl.gflags & GF_SEMI_TOGGLED) {
+	if (pl.gflags & GF_SEMI_TOGGLED)
 		return;
-	}
 
 	/* activate menu */
 	if (pl.menu_active <= 0) {
@@ -162,10 +159,8 @@ w_shotgun_secondary(player pl)
 void
 w_shotgun_release(player pl)
 {
-
-	if (pl.w_idle_next) {
+	if (pl.w_idle_next)
 		return;
-	}
 
 	int r  = (float)input_sequence % 5;
 	switch (r) {

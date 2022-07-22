@@ -14,25 +14,39 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*QUAKED monster_human_gunman (0 0.8 0.8) (-16 -16 0) (16 16 72)
-This is a monster entity from Gunman Chronicles.
+/*QUAKED decore_asteroid (0 0.8 0.8) (-16 -16 0) (16 16 40)
+This is a decorative entity from Gunman Chronicles.
 
 -------- KEYS --------
 "targetname" : Name
 
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/gunmantrooper.mdl"
+model="models/rockspin.mdl"
 */
 
-class monster_human_gunman:NSMonster
+class decore_asteroid:RWDecore
 {
-	void(void) monster_human_gunman;
+	void(void) decore_asteroid;
+
+	virtual void(string, string) SpawnKey;
 };
 
 void
-monster_human_gunman:: monster_human_gunman(void)
+decore_asteroid::SpawnKey(string strKey, string strValue)
 {
-	model = "models/gunmantrooper.mdl";
-	base_mins = [-16,-16,0];
-	base_maxs = [16,16,72];
+	switch (strKey) {
+	case "asteroidsize":
+		SetBody(stoi(strValue) + 1);
+		break;
+	default:
+		super::SpawnKey(strKey, strValue);
+	}
+}
+
+void
+decore_asteroid::decore_asteroid(void)
+{
+	model = "models/rockspin.mdl";
+	mins = [-16, -16, 0];
+	maxs = [16, 16, 40];
 }

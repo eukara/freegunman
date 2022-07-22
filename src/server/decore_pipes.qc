@@ -14,25 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*QUAKED monster_human_gunman (0 0.8 0.8) (-16 -16 0) (16 16 72)
-This is a monster entity from Gunman Chronicles.
+/*QUAKED decore_pipes (0 0.8 0.8) (-16 -16 -16) (16 16 0)
+This is a decorative entity from Gunman Chronicles.
 
 -------- KEYS --------
 "targetname" : Name
 
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/gunmantrooper.mdl"
+model="models/pipes.mdl"
 */
 
-class monster_human_gunman:NSMonster
+class decore_pipes:RWDecore
 {
-	void(void) monster_human_gunman;
+	void(void) decore_pipes;
 };
 
 void
-monster_human_gunman:: monster_human_gunman(void)
+decore_pipes::decore_pipes(void)
 {
-	model = "models/gunmantrooper.mdl";
-	base_mins = [-16,-16,0];
-	base_maxs = [16,16,72];
+	model = "models/pipes.mdl";
+	mins = [-16, -16, -16];
+	maxs = [16, 16, 0];
 }

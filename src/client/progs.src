@@ -18,7 +18,6 @@
 ../../../src/gs-entbase/shared.src
 ../shared/include.src
 
-decore.qc
 ../../../valve/src/client/damage.qc
 ../../../base/src/client/draw.qc
 init.qc

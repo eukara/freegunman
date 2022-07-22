@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 Marco Cawthorne <marco@icculus.org>
+ * Copyright (c) 2016-2022 Marco Cawthorne <marco@icculus.org>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,16 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-class monster_trainingbot:NSTalkMonster
+/*QUAKED monster_trainingbot (0 0.8 0.8) (-16 -16 0) (16 16 72)
+This is a monster entity from Gunman Chronicles.
+
+-------- KEYS --------
+"targetname" : Name
+
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/batterybot.mdl"
+*/
+
+class monster_trainingbot:NSMonster
 {
 	void(void) monster_trainingbot;
 };
 
 void
-monster_trainingbot::monster_trainingbot(void)
+monster_trainingbot:: monster_trainingbot(void)
 {
-	model = "models/gunmantrooper.mdl";
+	model = "models/batterybot.mdl";
 	base_mins = [-16,-16,0];
 	base_maxs = [16,16,72];
-	NSTalkMonster::NSTalkMonster();
 }

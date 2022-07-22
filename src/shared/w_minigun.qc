@@ -74,9 +74,9 @@ void
 w_minigun_primary(player pl)
 {
 	vector src;
-	if (pl.w_attack_next) {
+	if (pl.w_attack_next)
 		return;
-	}
+
 	if (pl.ammo_minigun <= 0) {
 		w_minigun_release(pl);
 		return;
@@ -115,9 +115,8 @@ w_minigun_primary(player pl)
 void
 w_minigun_secondary(player pl)
 {
-	if (pl.w_attack_next) {
+	if (pl.w_attack_next)
 		return;
-	}
 
 #ifdef SERVER
 	if (pl.menu_active == 0) {

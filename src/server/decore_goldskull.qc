@@ -14,25 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*QUAKED monster_human_gunman (0 0.8 0.8) (-16 -16 0) (16 16 72)
-This is a monster entity from Gunman Chronicles.
+/*QUAKED decore_goldskull (0 0.8 0.8) (-10 -10 -12) (10 10 12)
+This is a decorative monster entity from Gunman Chronicles.
 
 -------- KEYS --------
 "targetname" : Name
 
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/gunmantrooper.mdl"
+model="models/goldskull.mdl"
 */
 
-class monster_human_gunman:NSMonster
+class decore_goldskull:NSMonster
 {
-	void(void) monster_human_gunman;
+	void(void) decore_goldskull;
 };
 
 void
-monster_human_gunman:: monster_human_gunman(void)
+decore_goldskull::decore_goldskull(void)
 {
-	model = "models/gunmantrooper.mdl";
-	base_mins = [-16,-16,0];
-	base_maxs = [16,16,72];
+	model = "models/goldskull.mdl";
+	mins = [-10, -10, -12];
+	maxs = [10, 10, 12];
 }

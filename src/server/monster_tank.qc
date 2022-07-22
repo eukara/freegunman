@@ -14,25 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*QUAKED monster_human_gunman (0 0.8 0.8) (-16 -16 0) (16 16 72)
+/*QUAKED monster_tank (0 0.8 0.8) (-16 -16 0) (16 16 72)
 This is a monster entity from Gunman Chronicles.
 
 -------- KEYS --------
 "targetname" : Name
 
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/gunmantrooper.mdl"
+model="models/script_tank.mdl"
 */
 
-class monster_human_gunman:NSMonster
+class monster_tank:NSMonster
 {
-	void(void) monster_human_gunman;
+	void(void) monster_tank;
 };
 
 void
-monster_human_gunman:: monster_human_gunman(void)
+monster_tank:: monster_tank(void)
 {
-	model = "models/gunmantrooper.mdl";
+	model = "models/script_tank.mdl";
 	base_mins = [-16,-16,0];
 	base_maxs = [16,16,72];
 }

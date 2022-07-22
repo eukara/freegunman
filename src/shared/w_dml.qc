@@ -96,7 +96,7 @@ w_dml_release(player pl)
 	}
 	
 	if (pl.dml_state == DS_RELOADING) {
-		if (pl.menu_active == 1) {
+		if (pl.ammo_rocket & 1) {
 			Weapons_ViewAnimation(pl, DML_RELOADRIGHT);
 		} else {
 			Weapons_ViewAnimation(pl, DML_RELOADLEFT);
@@ -154,9 +154,8 @@ w_dml_primary(player pl)
 {
 	vector src;
 
-	if (pl.gflags & GF_SEMI_TOGGLED) {
+	if (pl.gflags & GF_SEMI_TOGGLED)
 		return;
-	}
 
 	if (pl.menu_active > 0) {
 		pl.menu_active = 0;
@@ -170,9 +169,11 @@ w_dml_primary(player pl)
 		return;
 	}
 
-	if (pl.w_attack_next) {
+	if (pl.ammo_rocket <= 0)
 		return;
-	}
+
+	if (pl.w_attack_next)
+		return;
 
 	if (pl.dml_state == DS_RELOADING) {
 		w_dml_release(pl);
@@ -188,6 +189,7 @@ w_dml_primary(player pl)
 
 	Weapons_ViewAnimation(pl, DML_FIRE);
 
+	pl.ammo_rocket -= 1;
 	pl.w_attack_next = 1.222222f;
 	pl.w_idle_next = 1.222222f;
 	pl.dml_state = DS_RELOADING;
