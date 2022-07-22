@@ -26,8 +26,34 @@ model="models/cactus.mdl"
 
 class decore_cactus:RWDecore
 {
+	float m_flDmgTest;
+
 	void(void) decore_cactus;
+
+	virtual void(void) Respawn;
+	virtual void(entity) StartTouch;
 };
+
+void
+decore_cactus::StartTouch(entity eToucher)
+{
+	if (m_flDmgTest > time)
+		return;
+
+	if (eToucher.takedamage == DAMAGE_NO)
+		return;
+
+	NSSurfacePropEntity t = (NSSurfacePropEntity)eToucher;
+	Damage_Apply(eToucher, this, 1, WEAPON_NONE, 0);
+	m_flDmgTest = time + 1.0f;
+}
+
+void
+decore_cactus::Respawn(void)
+{
+	super::Respawn();
+	SetSolid(SOLID_BBOX);
+}
 
 void
 decore_cactus::decore_cactus(void)
