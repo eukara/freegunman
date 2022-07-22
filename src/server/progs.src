@@ -27,6 +27,8 @@ monster_human_gunman.qc
 monster_human_unarmed.qc
 monster_trainingbot.qc
 
+entity_spritegod.qc
+
 ../../../valve/src/server/player.qc
 ../../../valve/src/server/spectator.qc
 
