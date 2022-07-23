@@ -29,7 +29,19 @@ class decore_torchflame:RWDecore
 	void(void) decore_torchflame;
 
 	virtual void(void) Respawn;
+	virtual void(void) UpdateFrame;
 };
+
+void
+decore_torchflame:: UpdateFrame(void)
+{
+	frame++;
+
+	if (frame > 22)
+		frame = 0;
+
+	nextthink = time + 0.1f;
+}
 
 void
 decore_torchflame::Respawn(void)
@@ -39,6 +51,8 @@ decore_torchflame::Respawn(void)
 	SetRenderMode(RM_ADDITIVE);
 	SetRenderColor([1,1,1]);
 	SetRenderAmt(1.0f);
+	think = UpdateFrame;
+	nextthink = time + 0.1f;
 }
 
 void
