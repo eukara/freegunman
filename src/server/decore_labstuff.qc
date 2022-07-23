@@ -14,59 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*QUAKED monster_tube_embryo (0 0.8 0.8) (-12 -12 -16) (16 16 24)
-This is a monster entity from Gunman Chronicles.
+/*QUAKED decore_labstuff (0 0.8 0.8) (-16 -16 0) (16 16 64)
+This is a decorative entity from Gunman Chronicles.
 
 -------- KEYS --------
 "targetname" : Name
 
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/tubryo.mdl"
+model="models/swampstuff.mdl"
 */
 
-class monster_tube_embryo:NSMonster
+class decore_labstuff:RWDecore
 {
-	decore_sack sack;
-	void(void) monster_tube_embryo;
-
-	virtual void(void) ParentUpdate;
-	virtual void(void) Spawned;
-	virtual void(void) Respawn;
+	void(void) decore_labstuff;
 };
 
 void
-monster_tube_embryo::ParentUpdate(void)
+decore_labstuff::decore_labstuff(void)
 {
-	super::ParentUpdate();
-
-	sack.SetOrigin(GetOrigin());
-	sack.SetAngles(GetAngles());
-}
-
-void
-monster_tube_embryo::Spawned(void)
-{
-	super::Spawned();
-
-	if (!sack)
-		sack = spawn(decore_sack);
-
-	sack.SetRenderMode(RM_COLOR);
-	sack.SetRenderAmt(0.75f);
-}
-
-void
-monster_tube_embryo::Respawn(void)
-{
-	SetModel(GetSpawnModel());
-	SetMovetype(MOVETYPE_FLY);
-	SetOrigin(GetSpawnOrigin());
-}
-
-void
-monster_tube_embryo::monster_tube_embryo(void)
-{
-	model = "models/tubryo.mdl";
-	base_mins = [-12,-12,-16];
-	base_maxs = [12,12,24];
+	model = "models/labstuff.mdl";
+	mins = [-16, -16, 0];
+	maxs = [16, 16, 64];
 }

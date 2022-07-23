@@ -36,6 +36,7 @@ decore_gutspile.qc
 decore_hatgib.qc
 decore_ice.qc
 decore_icebeak.qc
+decore_labstuff.qc
 decore_mushroom.qc
 decore_mushroom2.qc
 decore_nest.qc
@@ -43,6 +44,7 @@ decore_pipes.qc
 decore_prickle.qc
 decore_pteradon.qc
 decore_sittingtubemortar.qc
+decore_sack.qc
 decore_swampplants.qc
 decore_torchflame.qc
 decore_torch.qc
