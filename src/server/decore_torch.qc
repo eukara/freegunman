@@ -26,8 +26,23 @@ model="models/torch.mdl"
 
 class decore_torch:RWDecore
 {
+	decore_torchflame flame;
+
 	void(void) decore_torch;
+
+	virtual void(void) Spawned;
 };
+
+void
+decore_torch::Spawned(void)
+{
+	super::Spawned();
+
+	if (!flame)
+		flame = spawn(decore_torchflame);
+
+	flame.origin = flame.m_oldOrigin = origin + [0,0,32];
+}
 
 void
 decore_torch::decore_torch(void)

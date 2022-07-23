@@ -27,7 +27,19 @@ model="sprites/flames.spr"
 class decore_torchflame:RWDecore
 {
 	void(void) decore_torchflame;
+
+	virtual void(void) Respawn;
 };
+
+void
+decore_torchflame::Respawn(void)
+{
+	super::Respawn();
+
+	SetRenderMode(RM_ADDITIVE);
+	SetRenderColor([1,1,1]);
+	SetRenderAmt(1.0f);
+}
 
 void
 decore_torchflame::decore_torchflame(void)

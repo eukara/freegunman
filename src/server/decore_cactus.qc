@@ -16,6 +16,8 @@
 
 /*QUAKED decore_cactus (0 0.8 0.8) (-16 -16 0) (16 16 64)
 This is a decorative entity from Gunman Chronicles.
+It will hurt the player whenever it gets touched.
+The damage is 1 health point per second.
 
 -------- KEYS --------
 "targetname" : Name

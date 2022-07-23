@@ -44,8 +44,8 @@ decore_prickle.qc
 decore_pteradon.qc
 decore_sittingtubemortar.qc
 decore_swampplants.qc
-decore_torch.qc
 decore_torchflame.qc
+decore_torch.qc
 
 monster_cricket.qc
 monster_critter.qc

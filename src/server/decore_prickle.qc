@@ -35,4 +35,5 @@ decore_prickle::decore_prickle(void)
 	model = "models/prickle.mdl";
 	mins = [-8, -8, 0];
 	maxs = [8, 8, 8];
+	m_bDropToFloor = true;
 }
