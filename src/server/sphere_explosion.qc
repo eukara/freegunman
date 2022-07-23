@@ -14,6 +14,27 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+/*QUAKED sphere_explosion (0 0.8 0.8) (-16 -16 -16) (16 16 16)
+This is Gunman Chronicles' fancy explosion with its own set of parameters.
+Currently we just wrap it to call FX_Explosion.
+
+-------- KEYS --------
+"targetname"    : Name
+"maxradius"     : Explosion radius.
+"radiusstep"    : Expansion step in units.
+"trans"         : Starting transparency of the sphere (0-255)
+"transstep"     : Fade out steps.
+"numtracers"    : Number of traces, 0 = None, 1 = Fifteen.
+"shockwave"     : Shockwave ring visible? 0 = No, 1 = Yes
+"implosion"     : Implosion? 0 = No, 1 = Yes
+"shakeduration" : Duration of screen shake in seconds.
+"fadeholdtime"  : Fade effect hold time.
+"fadetime"      : Fade effect time.
+
+-------- TRIVIA --------
+This entity was introduced in Gunman Chronicles (2000).
+*/
+
 class
 sphere_explosion:NSPointTrigger
 {

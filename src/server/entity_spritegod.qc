@@ -14,6 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+/*QUAKED entity_spritegod (0 0.8 0.8) (-16 -16 -16) (16 16 16)
+Master entity for emitting a series of sprites.
+
+-------- KEYS --------
+"targetname" : Name
+"spritename" : Sprite model to emit
+"spritenoise" : Unknown.
+"spritestartstate" : Whether to start off (0) or on (1)
+"spritecount"      : How many sprites to emit per interval
+"spritefreq"       : Emitting frequency, defaults to 5.
+"spritex"          : Direction on the X-Axis (?)
+"spritey"          : Direction on the Y-Axis (?)
+"spritez"          : Direction on the Z-Axis (?)
+"targetent"        : Target entity, maybe used for setting the direction alternatively (?)
+
+-------- TRIVIA --------
+This entity was introduced in Gunman Chronicles (2000).
+*/
+
 class
 entity_spritegod:NSPointTrigger
 {
