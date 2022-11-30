@@ -29,46 +29,43 @@ enumflags
 
 class player:NSClientPlayer
 {
-	PREDICTED_INT(anim_top);
-	PREDICTED_FLOAT(anim_top_time);
-	PREDICTED_FLOAT(anim_top_delay);
-	PREDICTED_INT(anim_bottom);
-	PREDICTED_FLOAT(anim_bottom_time);
+	PREDICTED_INT(anim_top)
+	PREDICTED_FLOAT(anim_top_time)
+	PREDICTED_FLOAT(anim_top_delay)
+	PREDICTED_INT(anim_bottom)
+	PREDICTED_FLOAT(anim_bottom_time)
 
-	PREDICTED_INT(ammo_battery); /* beamgun */
-	PREDICTED_INT(ammo_chem); /* chemicalgun */
-	PREDICTED_INT(ammo_rocket); /* dml / grenades */
-	PREDICTED_INT(ammo_gauss); /* gauspistol */
-	PREDICTED_INT(ammo_minigun); /* minigun */
-	PREDICTED_INT(ammo_buckshot); /* shotgun */
+	PREDICTED_INT(ammo_battery) /* beamgun */
+	PREDICTED_INT(ammo_chem) /* chemicalgun */
+	PREDICTED_INT(ammo_rocket) /* dml / grenades */
+	PREDICTED_INT(ammo_gauss) /* gauspistol */
+	PREDICTED_INT(ammo_minigun) /* minigun */
+	PREDICTED_INT(ammo_buckshot) /* shotgun */
 
-	PREDICTED_INT(fist_mode); /* knife/fists */
-	PREDICTED_INT(gauss_mode);
-	PREDICTED_INT(shotgun_shells);
-	PREDICTED_INT(shotgun_spread);
+	PREDICTED_INT(fist_mode) /* knife/fists */
+	PREDICTED_INT(gauss_mode)
+	PREDICTED_INT(shotgun_shells)
+	PREDICTED_INT(shotgun_spread)
 	
-	PREDICTED_INT(dml_launch); /* when fired, when targeted */
-	PREDICTED_INT(dml_flightpath); /* guided, homing, spiral */
-	PREDICTED_INT(dml_detonate); /* on impact, in proximity, timed, when tripped */
-	PREDICTED_INT(dml_payload); /* explosive, cluster */
-	PREDICTED_INT(chem_acid);
-	PREDICTED_INT(chem_neutral);
-	PREDICTED_INT(chem_base);
-	PREDICTED_INT(chem_pressure);
+	PREDICTED_INT(dml_launch) /* when fired, when targeted */
+	PREDICTED_INT(dml_flightpath) /* guided, homing, spiral */
+	PREDICTED_INT(dml_detonate) /* on impact, in proximity, timed, when tripped */
+	PREDICTED_INT(dml_payload) /* explosive, cluster */
+	PREDICTED_INT(chem_acid)
+	PREDICTED_INT(chem_neutral)
+	PREDICTED_INT(chem_base)
+	PREDICTED_INT(chem_pressure)
 
-	PREDICTED_INT(beam_range); /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
-	PREDICTED_INT(beam_poweracc); /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
-	PREDICTED_INT(beam_lightning); /* BEAM, CHAIN, BALL */
-	PREDICTED_INT(gren_detonate); /* when tripped (tripmine), timed, on impact */
-	PREDICTED_INT(gren_payload); /* cluster, explosive */
+	PREDICTED_INT(beam_range) /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
+	PREDICTED_INT(beam_poweracc) /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
+	PREDICTED_INT(beam_lightning) /* BEAM, CHAIN, BALL */
+	PREDICTED_INT(gren_detonate) /* when tripped (tripmine), timed, on impact */
+	PREDICTED_INT(gren_payload) /* cluster, explosive */
 
-	PREDICTED_INT(menu_active);
-	PREDICTED_INT(dml_state);
+	PREDICTED_INT(menu_active)
+	PREDICTED_INT(dml_state)
 
 #ifdef CLIENT
-	virtual void(void) draw;
-	virtual float() predraw;
-	virtual void(void) postdraw;
 	virtual void(float,float) ReceiveEntity;
 	virtual void(void) PredictPreFrame;
 	virtual void(void) PredictPostFrame;
