@@ -50,7 +50,7 @@ entity_spritegod:NSPointTrigger
 	virtual void(string, string) SpawnKey;
 	virtual void(void) Respawn;
 	virtual void(void) EmitSprite;
-	virtual void(entity, int) Trigger;
+	virtual void(entity, triggermode_t) Trigger;
 	virtual void(void) StartTimer;
 	virtual void(void) Spawned;
 };
@@ -62,7 +62,7 @@ entity_spritegod::StartTimer(void)
 }
 
 void
-entity_spritegod::Trigger(entity eAct, int iState)
+entity_spritegod::Trigger(entity eAct, triggermode_t iState)
 {
 	switch (iState) {
 	case TRIG_OFF:

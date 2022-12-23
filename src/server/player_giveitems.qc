@@ -38,11 +38,11 @@ player_giveitems:NSPointTrigger
 {
 	void(void) player_giveitems;
 
-	virtual void(entity, int) Trigger;
+	virtual void(entity, triggermode_t) Trigger;
 };
 
 void
-player_giveitems::Trigger(entity eAct, int iState)
+player_giveitems::Trigger(entity eAct, triggermode_t iState)
 {
 	player pl = (player)eAct;
 

@@ -55,11 +55,11 @@ sphere_explosion:NSPointTrigger
 
 	virtual void(void) Respawn;
 	virtual void(string, string) SpawnKey;
-	virtual void(entity, int) Trigger;
+	virtual void(entity, triggermode_t) Trigger;
 };
 
 void
-sphere_explosion::Trigger(entity eAct, int iState)
+sphere_explosion::Trigger(entity eAct, triggermode_t iState)
 {
 	FX_Explosion(origin);
 }
