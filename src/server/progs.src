@@ -96,7 +96,6 @@ sphere_explosion.qc
 player_giveitems.qc
 
 ../../../valve/src/server/player.qc
-../../../valve/src/server/spectator.qc
 
 ../../../valve/src/server/items.qc
 
@@ -106,7 +105,6 @@ gamerules.qc
 ../../../valve/src/server/gamerules_singleplayer.qc
 gamerules_multiplayer.qc
 
-../../../valve/src/server/client.qc
 ../../../valve/src/server/server.qc
 ../../../base/src/server/damage.qc
 ../../../valve/src/server/flashlight.qc
