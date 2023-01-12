@@ -146,4 +146,27 @@ HLGameRules::PlayerKill(NSClientPlayer pp)
 {
 	player pl = (player)pp;
 	Damage_Apply(pl, pl, pl.health, WEAPON_NONE, DMG_SKIP_ARMOR);
-} 
+}
+
+void
+TriggerFlashlight(NSClient target)
+{
+	entity oldself = self;
+	self = target;
+	Flashlight_Toggle();
+	self = oldself;
+}
+
+bool
+HLGameRules::ImpulseCommand(NSClient bp, float num)
+{
+	switch (num) {
+	case 100:
+		TriggerFlashlight(bp);
+		break;
+	default:
+		return super::ImpulseCommand(bp, num);
+	}
+
+	return true;
+}

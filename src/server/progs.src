@@ -102,7 +102,7 @@ player_giveitems.qc
 ../../../src/botlib/include.src
 
 gamerules.qc
-../../../valve/src/server/gamerules_singleplayer.qc
+gamerules_singleplayer.qc
 gamerules_multiplayer.qc
 
 ../../../valve/src/server/server.qc

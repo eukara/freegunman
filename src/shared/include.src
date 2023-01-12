@@ -29,5 +29,4 @@ w_minigun.qc
 w_aicore.qc
 weapons.qc
 ../../../base/src/shared/weapon_common.qc
-input.qc
 #endlist
