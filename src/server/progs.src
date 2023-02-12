@@ -106,9 +106,9 @@ gamerules_singleplayer.qc
 gamerules_multiplayer.qc
 
 ../../../valve/src/server/server.qc
-../../../base/src/server/damage.qc
+../../../valve/src/server/damage.qc
 ../../../valve/src/server/flashlight.qc
-../../../base/src/server/modelevent.qc
+../../../valve/src/server/modelevent.qc
 
 ../../../valve/src/server/spawn.qc
 

@@ -20,7 +20,7 @@
 ../shared/include.src
 
 ../../../valve/src/client/damage.qc
-../../../base/src/client/draw.qc
+../../../valve/src/client/draw.qc
 init.qc
 ../../../valve/src/client/flashlight.qc
 entities.qc
@@ -34,7 +34,7 @@ entities.qc
 hud.qc
 hud_weaponselect.qc
 ../../../valve/src/client/scoreboard.qc
-../../../base/src/client/modelevent.qc
+../../../valve/src/client/modelevent.qc
 
 ../../../src/client/include.src
 ../../../src/shared/include.src
