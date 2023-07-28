@@ -61,7 +61,7 @@ sphere_explosion:NSPointTrigger
 void
 sphere_explosion::Trigger(entity eAct, triggermode_t iState)
 {
-	FX_Explosion(origin);
+	pointparticles(particleeffectnum("fx_explosion.main"), origin, [0,0,0], 1);
 }
 
 void

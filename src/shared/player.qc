@@ -14,6 +14,8 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include "../../../valve/src/shared/skeleton.h"
+
 /* all potential SendFlags bits we can possibly send */
 enumflags
 {
@@ -65,74 +67,198 @@ class player:NSClientPlayer
 	PREDICTED_INT(menu_active)
 	PREDICTED_INT(dml_state)
 
+	virtual void UpdatePlayerAnimation(float);
+
 #ifdef CLIENT
-	virtual void(float,float) ReceiveEntity;
-	virtual void(void) PredictPreFrame;
-	virtual void(void) PredictPostFrame;
-#else
+	virtual void UpdatePlayerAttachments(bool);
+	virtual void ReceiveEntity(float,float);
+	virtual void PredictPreFrame(void);
+	virtual void PredictPostFrame(void);
+	virtual void UpdateAliveCam(void);
+#endif
+
+#ifdef SERVER
 	virtual void(void) EvaluateEntity;
 	virtual float(entity, float) SendEntity;
 #endif
 };
 
+void Animation_PlayerUpdate(player); 
+void Animation_TimerUpdate(player, float); 
+
+void
+player::UpdatePlayerAnimation(float timelength)
+{
+	/* calculate our skeletal progression */
+	Animation_PlayerUpdate(this);
+	/* advance animation timers */
+	Animation_TimerUpdate(this, timelength);
+}
+
 #ifdef CLIENT
+void Camera_RunPosBob(vector angles, __inout vector camera_pos);
+void Camera_StrafeRoll(__inout vector camera_angle);
+void Shake_Update(NSClientPlayer);
+
+void
+player::UpdateAliveCam(void)
+{
+	vector cam_pos = GetEyePos();
+	Camera_RunPosBob(view_angles, cam_pos);
+
+	g_view.SetCameraOrigin(cam_pos);
+	Camera_StrafeRoll(view_angles);
+	g_view.SetCameraAngle(view_angles);
+
+	if (vehicle) {
+		NSVehicle veh = (NSVehicle)vehicle;
+
+		if (veh.UpdateView)
+			veh.UpdateView();
+	} else if (health) {
+		if (autocvar_pm_thirdPerson == TRUE) {
+			makevectors(view_angles);
+			vector vStart = [pSeat->m_vecPredictedOrigin[0], pSeat->m_vecPredictedOrigin[1], pSeat->m_vecPredictedOrigin[2] + 16] + (v_right * 4);
+			vector vEnd = vStart + (v_forward * -48) + [0,0,16] + (v_right * 4);
+			traceline(vStart, vEnd, FALSE, this);
+			g_view.SetCameraOrigin(trace_endpos + (v_forward * 5));
+		}
+	}
+
+	Shake_Update(this);
+	g_view.AddPunchAngle(punchangle);
+}
+
+.string oldmodel;
+string Weapons_GetPlayermodel(player, int);
+
+void
+player::UpdatePlayerAttachments(bool visible)
+{
+	/* draw the flashlight */
+	if (gflags & GF_FLASHLIGHT) {
+		vector src;
+		vector ang;
+		
+		if (entnum != player_localentnum) {
+			src = origin + view_ofs;
+			ang = v_angle;
+		} else {
+			src = pSeat->m_vecPredictedOrigin + [0,0,-8];
+			ang = view_angles;
+		}
+
+		makevectors(ang);
+		traceline(src, src + (v_forward * 8096), MOVE_NORMAL, this);
+
+		if (serverkeyfloat("*bspversion") == BSPVER_HL) {
+			dynamiclight_add(trace_endpos + (v_forward * -2), 128, [1,1,1]);
+		} else {
+			float p = dynamiclight_add(src, 512, [1,1,1], 0, "textures/flashlight");
+			dynamiclight_set(p, LFIELD_ANGLES, ang);
+			dynamiclight_set(p, LFIELD_FLAGS, 3);
+		}
+	}
+
+	/* FIXME: this needs to be incorporated and simplified, now that we can handle it all in-class */
+	if (!visible)
+		return;
+
+	/* what's the current weapon model supposed to be anyway? */
+	p_model.oldmodel = Weapons_GetPlayermodel(this, activeweapon);
+
+	/* we changed weapons, update skeletonindex */
+	if (p_model.model != p_model.oldmodel) {
+		/* free memory */
+		if (p_model.skeletonindex)
+			skel_delete(p_model.skeletonindex);
+
+		/* set the new model and mark us updated */
+		setmodel(p_model, p_model.oldmodel);
+		p_model.model = p_model.oldmodel;
+		
+		/* set the new skeletonindex */
+		p_model.skeletonindex = skel_create(p_model.modelindex);
+
+		/* hack this thing in here FIXME: this should be done when popping in/out of a pvs */
+		if (autocvar(cl_himodels, 1, "Use high-quality thisayer models over lower-definition ones"))
+			setcustomskin(this, "", "geomset 0 2\n");
+		else
+			setcustomskin(this, "", "geomset 0 1\n");
+	}
+
+	/* follow thisayer at all times */
+	setorigin(p_model, origin);
+	p_model.angles = angles;
+	skel_build(p_model.skeletonindex, p_model, p_model.modelindex,0, 0, -1);
+
+	/* we have to loop through all valid bones of the weapon model and match them
+	 * to the thisayer one */
+	for (float i = 0; i < g_pbones.length; i++) {
+		vector bpos;
+		float pbone = gettagindex(this, g_pbones[i]);
+		float wbone = gettagindex(p_model, g_pbones[i]);
+
+		/* if the bone doesn't ignore in either skeletal mesh, ignore */
+		if (wbone <= 0 || pbone <= 0)
+			continue;
+
+		bpos = gettaginfo(this, pbone);
+		
+		/* the most expensive bit */
+		skel_set_bone_world(p_model, wbone, bpos, v_forward, v_right, v_up);
+	}
+}
+
 void Weapons_AmmoUpdate(entity);
+
 /*
 =================
 player::ReceiveEntity
 =================
 */
 void
-player::ReceiveEntity(float new, float fl)
+player::ReceiveEntity(float new, float flChanged)
 {
-	NSClientPlayer::ReceiveEntity(new, fl);
+	NSClientPlayer::ReceiveEntity(new, flChanged);
 
 	/* animation */
-	if (fl & PLAYER_TOPFRAME) {
-		anim_top = readbyte();
-		anim_top_time = readfloat();
-		anim_top_delay = readfloat();
-	}
-	if (fl & PLAYER_BOTTOMFRAME) {
-		anim_bottom = readbyte();
-		anim_bottom_time = readfloat();
-	}
+	READENTITY_BYTE(anim_top, PLAYER_TOPFRAME);
+	READENTITY_FLOAT(anim_top_time, PLAYER_TOPFRAME);
+	READENTITY_FLOAT(anim_top_delay, PLAYER_TOPFRAME);
 
-	if (fl & PLAYER_AMMO1) {
-		ammo_battery = readbyte();
-		ammo_chem = readbyte();
-		ammo_rocket = readbyte();
-		ammo_gauss = readbyte();
-		ammo_minigun = readbyte();
-		ammo_buckshot = readbyte();
-		fist_mode = readbyte();
-		gauss_mode = readbyte();
-		shotgun_shells = readbyte();
-		shotgun_spread = readbyte();
-	}
-	
-	if (fl & PLAYER_AMMO2) {
-		dml_launch = readbyte();
-		dml_flightpath = readbyte();
-		dml_detonate = readbyte();
-		dml_payload = readbyte();
-		chem_acid = readbyte();
-		chem_neutral = readbyte();
-		chem_base = readbyte();
-		chem_pressure = readbyte();
-	}
+	READENTITY_BYTE(anim_bottom, PLAYER_BOTTOMFRAME);
+	READENTITY_FLOAT(anim_bottom_time, PLAYER_BOTTOMFRAME);
 
-	if (fl & PLAYER_AMMO3) {
-		beam_range = readbyte();
-		beam_poweracc = readbyte();
-		beam_lightning = readbyte();
-		gren_detonate = readbyte();
-		gren_payload = readbyte();
-		menu_active = readbyte();
-		dml_state = readbyte();
-	}
+	READENTITY_BYTE(ammo_battery, PLAYER_AMMO1);
+	READENTITY_BYTE(ammo_chem, PLAYER_AMMO1);
+	READENTITY_BYTE(ammo_rocket, PLAYER_AMMO1);
+	READENTITY_BYTE(ammo_gauss, PLAYER_AMMO1);
+	READENTITY_BYTE(ammo_minigun, PLAYER_AMMO1);
+	READENTITY_BYTE(ammo_buckshot, PLAYER_AMMO1);
+	READENTITY_BYTE(fist_mode, PLAYER_AMMO1);
+	READENTITY_BYTE(gauss_mode, PLAYER_AMMO1);
+	READENTITY_BYTE(shotgun_shells, PLAYER_AMMO1);
+	READENTITY_BYTE(shotgun_spread, PLAYER_AMMO1);
 
-	if (fl & PLAYER_AMMO1 || fl & PLAYER_AMMO2 || fl & PLAYER_AMMO3)
+	READENTITY_BYTE(dml_launch, PLAYER_AMMO2);
+	READENTITY_BYTE(dml_flightpath, PLAYER_AMMO2);
+	READENTITY_BYTE(dml_detonate, PLAYER_AMMO2);
+	READENTITY_BYTE(dml_payload, PLAYER_AMMO2);
+	READENTITY_BYTE(chem_acid, PLAYER_AMMO2);
+	READENTITY_BYTE(chem_neutral, PLAYER_AMMO2);
+	READENTITY_BYTE(chem_base, PLAYER_AMMO2);
+	READENTITY_BYTE(chem_pressure, PLAYER_AMMO2);
+
+	READENTITY_BYTE(beam_range, PLAYER_AMMO3);
+	READENTITY_BYTE(beam_poweracc, PLAYER_AMMO3);
+	READENTITY_BYTE(beam_lightning, PLAYER_AMMO3);
+	READENTITY_BYTE(gren_detonate, PLAYER_AMMO3);
+	READENTITY_BYTE(gren_payload, PLAYER_AMMO3);
+	READENTITY_BYTE(menu_active, PLAYER_AMMO3);
+	READENTITY_BYTE(dml_state, PLAYER_AMMO3);
+
+	if (flChanged & PLAYER_AMMO1 || flChanged & PLAYER_AMMO2 || flChanged & PLAYER_AMMO3)
 		Weapons_AmmoUpdate(this);
 
 	setorigin(this, origin);
@@ -151,40 +277,40 @@ player::PredictPreFrame(void)
 {
 	NSClientPlayer::PredictPreFrame();
 
-	SAVE_STATE(anim_top);
-	SAVE_STATE(anim_top_time);
-	SAVE_STATE(anim_top_delay);
-	SAVE_STATE(anim_bottom);
-	SAVE_STATE(anim_bottom_time);
+	SAVE_STATE(anim_top)
+	SAVE_STATE(anim_top_time)
+	SAVE_STATE(anim_top_delay)
+	SAVE_STATE(anim_bottom)
+	SAVE_STATE(anim_bottom_time)
 
-	SAVE_STATE(ammo_battery);
-	SAVE_STATE(ammo_chem);
-	SAVE_STATE(ammo_rocket);
-	SAVE_STATE(ammo_gauss);
-	SAVE_STATE(ammo_minigun);
-	SAVE_STATE(ammo_buckshot);
-	SAVE_STATE(fist_mode);
-	SAVE_STATE(gauss_mode);
-	SAVE_STATE(shotgun_shells);
-	SAVE_STATE(shotgun_spread);
+	SAVE_STATE(ammo_battery)
+	SAVE_STATE(ammo_chem)
+	SAVE_STATE(ammo_rocket)
+	SAVE_STATE(ammo_gauss)
+	SAVE_STATE(ammo_minigun)
+	SAVE_STATE(ammo_buckshot)
+	SAVE_STATE(fist_mode)
+	SAVE_STATE(gauss_mode)
+	SAVE_STATE(shotgun_shells)
+	SAVE_STATE(shotgun_spread)
 
-	SAVE_STATE(dml_launch);
-	SAVE_STATE(dml_flightpath);
-	SAVE_STATE(dml_detonate);
-	SAVE_STATE(dml_payload);
-	SAVE_STATE(chem_acid);
-	SAVE_STATE(chem_neutral);
-	SAVE_STATE(chem_base);
-	SAVE_STATE(chem_pressure);
+	SAVE_STATE(dml_launch)
+	SAVE_STATE(dml_flightpath)
+	SAVE_STATE(dml_detonate)
+	SAVE_STATE(dml_payload)
+	SAVE_STATE(chem_acid)
+	SAVE_STATE(chem_neutral)
+	SAVE_STATE(chem_base)
+	SAVE_STATE(chem_pressure)
 
-	SAVE_STATE(beam_range);
-	SAVE_STATE(beam_poweracc);
-	SAVE_STATE(beam_lightning);
-	SAVE_STATE(gren_detonate);
-	SAVE_STATE(gren_payload);
+	SAVE_STATE(beam_range)
+	SAVE_STATE(beam_poweracc)
+	SAVE_STATE(beam_lightning)
+	SAVE_STATE(gren_detonate)
+	SAVE_STATE(gren_payload)
 
-	SAVE_STATE(menu_active);
-	SAVE_STATE(dml_state);
+	SAVE_STATE(menu_active)
+	SAVE_STATE(dml_state)
 }
 
 /*
@@ -199,40 +325,40 @@ player::PredictPostFrame(void)
 {
 	NSClientPlayer::PredictPostFrame();
 
-	ROLL_BACK(anim_top);
-	ROLL_BACK(anim_top_time);
-	ROLL_BACK(anim_top_delay);
-	ROLL_BACK(anim_bottom);
-	ROLL_BACK(anim_bottom_time);
+	ROLL_BACK(anim_top)
+	ROLL_BACK(anim_top_time)
+	ROLL_BACK(anim_top_delay)
+	ROLL_BACK(anim_bottom)
+	ROLL_BACK(anim_bottom_time)
 
-	ROLL_BACK(ammo_battery);
-	ROLL_BACK(ammo_chem);
-	ROLL_BACK(ammo_rocket);
-	ROLL_BACK(ammo_gauss);
-	ROLL_BACK(ammo_minigun);
-	ROLL_BACK(ammo_buckshot);
-	ROLL_BACK(fist_mode);
-	ROLL_BACK(gauss_mode);
-	ROLL_BACK(shotgun_shells);
-	ROLL_BACK(shotgun_spread);
+	ROLL_BACK(ammo_battery)
+	ROLL_BACK(ammo_chem)
+	ROLL_BACK(ammo_rocket)
+	ROLL_BACK(ammo_gauss)
+	ROLL_BACK(ammo_minigun)
+	ROLL_BACK(ammo_buckshot)
+	ROLL_BACK(fist_mode)
+	ROLL_BACK(gauss_mode)
+	ROLL_BACK(shotgun_shells)
+	ROLL_BACK(shotgun_spread)
 
-	ROLL_BACK(dml_launch);
-	ROLL_BACK(dml_flightpath);
-	ROLL_BACK(dml_detonate);
-	ROLL_BACK(dml_payload);
-	ROLL_BACK(chem_acid);
-	ROLL_BACK(chem_neutral);
-	ROLL_BACK(chem_base);
-	ROLL_BACK(chem_pressure);
+	ROLL_BACK(dml_launch)
+	ROLL_BACK(dml_flightpath)
+	ROLL_BACK(dml_detonate)
+	ROLL_BACK(dml_payload)
+	ROLL_BACK(chem_acid)
+	ROLL_BACK(chem_neutral)
+	ROLL_BACK(chem_base)
+	ROLL_BACK(chem_pressure)
 
-	ROLL_BACK(beam_range);
-	ROLL_BACK(beam_poweracc);
-	ROLL_BACK(beam_lightning);
-	ROLL_BACK(gren_detonate);
-	ROLL_BACK(gren_payload);
+	ROLL_BACK(beam_range)
+	ROLL_BACK(beam_poweracc)
+	ROLL_BACK(beam_lightning)
+	ROLL_BACK(gren_detonate)
+	ROLL_BACK(gren_payload)
 
-	ROLL_BACK(menu_active);
-	ROLL_BACK(dml_state);
+	ROLL_BACK(menu_active)
+	ROLL_BACK(dml_state)
 }
 
 #else
@@ -241,100 +367,40 @@ player::EvaluateEntity(void)
 {
 	NSClientPlayer::EvaluateEntity();
 
-	/* animation */
-	if (ATTR_CHANGED(anim_bottom) || ATTR_CHANGED(anim_bottom_time))
-		SendFlags |= PLAYER_BOTTOMFRAME;
-	if (ATTR_CHANGED(anim_top) || ATTR_CHANGED(anim_top_time) || ATTR_CHANGED(anim_top_delay))
-		SendFlags |= PLAYER_TOPFRAME;
+	EVALUATE_FIELD(anim_top, PLAYER_TOPFRAME);
+	EVALUATE_FIELD(anim_top_time, PLAYER_TOPFRAME);
+	EVALUATE_FIELD(anim_top_delay, PLAYER_TOPFRAME);
 
-	/* ammo 1 type updates */
-	if (ATTR_CHANGED(ammo_battery))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(ammo_chem))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(ammo_rocket))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(ammo_gauss))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(ammo_minigun))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(ammo_buckshot))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(fist_mode))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(gauss_mode))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(shotgun_shells))
-		SendFlags |= PLAYER_AMMO1;
-	if (ATTR_CHANGED(shotgun_spread))
-		SendFlags |= PLAYER_AMMO1;
+	EVALUATE_FIELD(anim_bottom, PLAYER_BOTTOMFRAME);
+	EVALUATE_FIELD(anim_bottom_time, PLAYER_BOTTOMFRAME);
 
-	if (ATTR_CHANGED(dml_launch))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(dml_flightpath))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(dml_detonate))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(dml_payload))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(chem_acid))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(chem_neutral))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(chem_base))
-		SendFlags |= PLAYER_AMMO2;
-	if (ATTR_CHANGED(chem_pressure))
-		SendFlags |= PLAYER_AMMO2;
+	EVALUATE_FIELD(ammo_battery, PLAYER_AMMO1);
+	EVALUATE_FIELD(ammo_chem, PLAYER_AMMO1);
+	EVALUATE_FIELD(ammo_rocket, PLAYER_AMMO1);
+	EVALUATE_FIELD(ammo_gauss, PLAYER_AMMO1);
+	EVALUATE_FIELD(ammo_minigun, PLAYER_AMMO1);
+	EVALUATE_FIELD(ammo_buckshot, PLAYER_AMMO1);
+	EVALUATE_FIELD(fist_mode, PLAYER_AMMO1);
+	EVALUATE_FIELD(gauss_mode, PLAYER_AMMO1);
+	EVALUATE_FIELD(shotgun_shells, PLAYER_AMMO1);
+	EVALUATE_FIELD(shotgun_spread, PLAYER_AMMO1);
 
-	if (ATTR_CHANGED(beam_range))
-		SendFlags |= PLAYER_AMMO3;
-	if (ATTR_CHANGED(beam_poweracc))
-		SendFlags |= PLAYER_AMMO3;
-	if (ATTR_CHANGED(beam_lightning))
-		SendFlags |= PLAYER_AMMO3;
-	if (ATTR_CHANGED(gren_detonate))
-		SendFlags |= PLAYER_AMMO3;
-	if (ATTR_CHANGED(gren_payload))
-		SendFlags |= PLAYER_AMMO3;
-	if (ATTR_CHANGED(menu_active))
-		SendFlags |= PLAYER_AMMO3;
-	if (ATTR_CHANGED(dml_state))
-		SendFlags |= PLAYER_AMMO3;
+	EVALUATE_FIELD(dml_launch, PLAYER_AMMO2);
+	EVALUATE_FIELD(dml_flightpath, PLAYER_AMMO2);
+	EVALUATE_FIELD(dml_detonate, PLAYER_AMMO2);
+	EVALUATE_FIELD(dml_payload, PLAYER_AMMO2);
+	EVALUATE_FIELD(chem_acid, PLAYER_AMMO2);
+	EVALUATE_FIELD(chem_neutral, PLAYER_AMMO2);
+	EVALUATE_FIELD(chem_base, PLAYER_AMMO2);
+	EVALUATE_FIELD(chem_pressure, PLAYER_AMMO2);
 
-	SAVE_STATE(anim_top);
-	SAVE_STATE(anim_top_time);
-	SAVE_STATE(anim_top_delay);
-	SAVE_STATE(anim_bottom);
-	SAVE_STATE(anim_bottom_time);
-
-	SAVE_STATE(ammo_battery);
-	SAVE_STATE(ammo_chem);
-	SAVE_STATE(ammo_rocket);
-	SAVE_STATE(ammo_gauss);
-	SAVE_STATE(ammo_minigun);
-	SAVE_STATE(ammo_buckshot);
-	SAVE_STATE(fist_mode);
-	SAVE_STATE(gauss_mode);
-	SAVE_STATE(shotgun_shells);
-	SAVE_STATE(shotgun_spread);
-
-	SAVE_STATE(dml_launch);
-	SAVE_STATE(dml_flightpath);
-	SAVE_STATE(dml_detonate);
-	SAVE_STATE(dml_payload);
-	SAVE_STATE(chem_acid);
-	SAVE_STATE(chem_neutral);
-	SAVE_STATE(chem_base);
-	SAVE_STATE(chem_pressure);
-
-	SAVE_STATE(beam_range);
-	SAVE_STATE(beam_poweracc);
-	SAVE_STATE(beam_lightning);
-	SAVE_STATE(gren_detonate);
-	SAVE_STATE(gren_payload);
-
-	SAVE_STATE(menu_active);
-	SAVE_STATE(dml_state);
+	EVALUATE_FIELD(beam_range, PLAYER_AMMO3);
+	EVALUATE_FIELD(beam_poweracc, PLAYER_AMMO3);
+	EVALUATE_FIELD(beam_lightning, PLAYER_AMMO3);
+	EVALUATE_FIELD(gren_detonate, PLAYER_AMMO3);
+	EVALUATE_FIELD(gren_payload, PLAYER_AMMO3);
+	EVALUATE_FIELD(menu_active, PLAYER_AMMO3);
+	EVALUATE_FIELD(dml_state, PLAYER_AMMO3);
 }
 
 /*
@@ -356,51 +422,43 @@ player::SendEntity(entity ePEnt, float flChanged)
 	WriteByte(MSG_ENTITY, ENT_PLAYER);
 	WriteFloat(MSG_ENTITY, flChanged);
 
+	/* the generic client attributes */
 	NSClientPlayer::SendEntity(ePEnt, flChanged);
 
-	if (flChanged & PLAYER_TOPFRAME) {
-		WriteByte(MSG_ENTITY, anim_top);
-		WriteFloat(MSG_ENTITY, anim_top_time);
-		WriteFloat(MSG_ENTITY, anim_top_delay);
-	}
-	if (flChanged & PLAYER_BOTTOMFRAME) {
-		WriteByte(MSG_ENTITY, anim_bottom);
-		WriteFloat(MSG_ENTITY, anim_bottom_time);
-	}
+	SENDENTITY_BYTE(anim_top, PLAYER_TOPFRAME);
+	SENDENTITY_FLOAT(anim_top_time, PLAYER_TOPFRAME);
+	SENDENTITY_FLOAT(anim_top_delay, PLAYER_TOPFRAME);
 
-	if (flChanged & PLAYER_AMMO1) {
-		WriteByte(MSG_ENTITY, ammo_battery);
-		WriteByte(MSG_ENTITY, ammo_chem);
-		WriteByte(MSG_ENTITY, ammo_rocket);
-		WriteByte(MSG_ENTITY, ammo_gauss);
-		WriteByte(MSG_ENTITY, ammo_minigun);
-		WriteByte(MSG_ENTITY, ammo_buckshot);
-		WriteByte(MSG_ENTITY, fist_mode);
-		WriteByte(MSG_ENTITY, gauss_mode);
-		WriteByte(MSG_ENTITY, shotgun_shells);
-		WriteByte(MSG_ENTITY, shotgun_spread);
-	}
-	
-	if (flChanged & PLAYER_AMMO2) {
-		WriteByte(MSG_ENTITY, dml_launch);
-		WriteByte(MSG_ENTITY, dml_flightpath);
-		WriteByte(MSG_ENTITY, dml_detonate);
-		WriteByte(MSG_ENTITY, dml_payload);
-		WriteByte(MSG_ENTITY, chem_acid);
-		WriteByte(MSG_ENTITY, chem_neutral);
-		WriteByte(MSG_ENTITY, chem_base);
-		WriteByte(MSG_ENTITY, chem_pressure);
-	}
+	SENDENTITY_BYTE(anim_bottom, PLAYER_BOTTOMFRAME);
+	SENDENTITY_FLOAT(anim_bottom_time, PLAYER_BOTTOMFRAME);
 
-	if (flChanged & PLAYER_AMMO3) {
-		WriteByte(MSG_ENTITY, beam_range);
-		WriteByte(MSG_ENTITY, beam_poweracc);
-		WriteByte(MSG_ENTITY, beam_lightning);
-		WriteByte(MSG_ENTITY, gren_detonate);
-		WriteByte(MSG_ENTITY, gren_payload);
-		WriteByte(MSG_ENTITY, menu_active);
-		WriteByte(MSG_ENTITY, dml_state);
-	}
+	SENDENTITY_BYTE(ammo_battery, PLAYER_AMMO1);
+	SENDENTITY_BYTE(ammo_chem, PLAYER_AMMO1);
+	SENDENTITY_BYTE(ammo_rocket, PLAYER_AMMO1);
+	SENDENTITY_BYTE(ammo_gauss, PLAYER_AMMO1);
+	SENDENTITY_BYTE(ammo_minigun, PLAYER_AMMO1);
+	SENDENTITY_BYTE(ammo_buckshot, PLAYER_AMMO1);
+	SENDENTITY_BYTE(fist_mode, PLAYER_AMMO1);
+	SENDENTITY_BYTE(gauss_mode, PLAYER_AMMO1);
+	SENDENTITY_BYTE(shotgun_shells, PLAYER_AMMO1);
+	SENDENTITY_BYTE(shotgun_spread, PLAYER_AMMO1);
+
+	SENDENTITY_BYTE(dml_launch, PLAYER_AMMO2);
+	SENDENTITY_BYTE(dml_flightpath, PLAYER_AMMO2);
+	SENDENTITY_BYTE(dml_detonate, PLAYER_AMMO2);
+	SENDENTITY_BYTE(dml_payload, PLAYER_AMMO2);
+	SENDENTITY_BYTE(chem_acid, PLAYER_AMMO2);
+	SENDENTITY_BYTE(chem_neutral, PLAYER_AMMO2);
+	SENDENTITY_BYTE(chem_base, PLAYER_AMMO2);
+	SENDENTITY_BYTE(chem_pressure, PLAYER_AMMO2);
+
+	SENDENTITY_BYTE(beam_range, PLAYER_AMMO3);
+	SENDENTITY_BYTE(beam_poweracc, PLAYER_AMMO3);
+	SENDENTITY_BYTE(beam_lightning, PLAYER_AMMO3);
+	SENDENTITY_BYTE(gren_detonate, PLAYER_AMMO3);
+	SENDENTITY_BYTE(gren_payload, PLAYER_AMMO3);
+	SENDENTITY_BYTE(menu_active, PLAYER_AMMO3);
+	SENDENTITY_BYTE(dml_state, PLAYER_AMMO3);
 
 	return (1);
 }

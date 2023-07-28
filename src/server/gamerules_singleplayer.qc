@@ -37,7 +37,9 @@ HLSingleplayerRules::PlayerDeath(NSClientPlayer pl)
 	}
 
 	if (pl.health < -50) {
-		FX_GibHuman(pl.origin, vectoangles(pl.origin - g_dmg_eAttacker.origin), g_dmg_iDamage * 2.0f);
+		vector gibDir = vectoangles(pl.origin - g_dmg_eAttacker.origin);
+		float gibStrength = g_dmg_iDamage * 2.0f;
+		BreakModel_Entity(pl, gibDir, gibStrength);
 	}
 
 	/* Let's handle corpses on the clientside */
@@ -78,16 +80,16 @@ HLSingleplayerRules::PlayerSpawn(NSClientPlayer pl)
 
 	setmodel(pl, pl.model);
 
-	setsize(pl, VEC_HULL_MIN, VEC_HULL_MAX);
-	pl.velocity = [0,0,0];
+	pl.SetSize(VEC_HULL_MIN, VEC_HULL_MAX);
+	pl.ClearVelocity();
 	pl.gravity = __NULL__;
-	pl.frame = 1;
-	//pl.SendEntity = Player_SendEntity;
+	pl.SetFrame(1);
 	pl.SendFlags = UPDATE_ALL;
-	pl.customphysics = Empty;
-	pl.iBleeds = TRUE;
-	forceinfokey(pl, "*spec", "0");
-	forceinfokey(pl, "*deaths", ftos(pl.deaths));
+	pl.SetInfoKey("*spec", "0");
+	pl.SetInfoKey("*dead", "0");
+	pl.SetInfoKey("*deaths", ftos(pl.deaths));
+	pl.SetPropData("actor_human");
+	pl.SetCanBleed(true);
 
 	/* this is where the mods want to deviate */
 	entity spot;

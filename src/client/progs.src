@@ -33,6 +33,7 @@ entities.qc
 ../../../valve/src/client/hud_dmgnotify.qc
 hud.qc
 hud_weaponselect.qc
+../../../valve/src/client/hud_sprite.qc
 ../../../valve/src/client/scoreboard.qc
 ../../../valve/src/client/modelevent.qc
 
