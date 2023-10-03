@@ -1,0 +1,15 @@
+entityDef monster_human_chopper
+{
+	"spawnclass"		"NSMonster"
+	"model"			"models/chopper.mdl"
+	"netname"		"Chopper"
+	"health"		"skill:human_chopper_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"64"
+	"team"			"0"
+	"propdata"		"actor_robot"
+
+	"speed_walk"		"50"
+	"speed_run"		"200"
+}

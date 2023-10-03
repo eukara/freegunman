@@ -1,0 +1,15 @@
+entityDef monster_scorpion
+{
+	"spawnclass"		"NSMonster"
+	"model"			"models/scorpion_small.mdl"
+	"netname"		"Tank"
+	"health"		"skill:tank_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"16"
+	"team"			"2"
+	"propdata"		"actor_alien"
+
+	"speed_walk"		"0"
+	"speed_run"		"0"
+}

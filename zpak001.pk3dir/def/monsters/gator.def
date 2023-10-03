@@ -1,0 +1,15 @@
+entityDef monster_gator
+{
+	"spawnclass"		"NSMonster"
+	"model"			"models/gator.mdl"
+	"netname"		"Gator"
+	"health"		"skill:gator_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"64"
+	"team"			"1"
+	"propdata"		"actor_human"
+
+	"speed_walk"		"50"
+	"speed_run"		"200"
+}

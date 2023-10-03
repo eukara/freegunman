@@ -1,0 +1,15 @@
+entityDef monster_rustgunr
+{
+	"spawnclass"		"NSMonster"
+	"model"			"models/gunner.mdl"
+	"netname"		"Tank"
+	"health"		"skill:rustgunr_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"64"
+	"team"			"0"
+	"propdata"		"actor_robot"
+
+	"speed_walk"		"0"
+	"speed_run"		"0"
+}

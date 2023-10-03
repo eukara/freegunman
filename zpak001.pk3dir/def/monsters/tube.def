@@ -1,0 +1,54 @@
+entityDef monster_tube
+{
+	"spawnclass"		"NSSquadMonster"
+	"model"			"models/tube.mdl"
+	"netname"		"Tube"
+	"health"		"skill:tube_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"64"
+	"team"			"2"
+	"propdata"		"actor_alien"
+	"speed_walk"		"46"
+	"speed_run"		"292"
+
+	"attack_ranged_range"	"512"
+
+	"snd_idle"		"monster_alien_grunt.idle"
+	"snd_pain"		"monster_alien_grunt.pain"
+	"snd_death"		"monster_alien_grunt.pain"
+	"snd_melee_attack"	"monster_alien_grunt.attack"
+	"snd_melee_attack_hit"	"monster_zombie.attackhit"
+	"snd_melee_attack_miss"	"monster_zombie.attackmiss"
+	"snd_thud"		"monster_generic.thud"
+
+	// animation event callbacks
+	events {
+		1 "SpawnProjectileDef" "ranged_agrunt_shot"
+		1 "StartSoundDef" "weapon_hornetgun.fire"
+	}
+}
+
+entityDef ranged_agrunt_shot
+{
+	"spawnclass"		"NSProjectile"
+	"model"			"models/hornet.mdl"
+
+	"def_damage"		"damage_tubeDirect"
+
+	"health"		"0"
+	"velocity"		"300"
+	"fuse"			"10"
+	"detonate_on_fuse"	"0"
+	"detonate_on_death"	"0"
+	"detonate_on_world"	"0"
+	"detonate_on_actor"	"1"
+	"impact_damage_effect"	"1"
+	"impact_gib"		"0"
+	"smoke_fly"		"weapon_hornet.trail"
+}
+
+entityDef damage_tubeDirect
+{
+	damage "skill:hornet_dmg"
+}

@@ -1,0 +1,15 @@
+entityDef monster_human_demoman
+{
+	"spawnclass"		"NSMonster"
+	"model"			"models/demolitionman.mdl"
+	"netname"		"Demoman"
+	"health"		"skill:human_demoman_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"64"
+	"team"			"0"
+	"propdata"		"actor_human"
+
+	"speed_walk"		"50"
+	"speed_run"		"200"
+}

@@ -1,0 +1,15 @@
+entityDef monster_microraptor
+{
+	"spawnclass"		"NSMonster"
+	"model"			"models/microraptor.mdl"
+	"netname"		"Micro Raptor"
+	"health"		"skill:microraptor_health"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 72"
+	"eye_height"		"64"
+	"team"			"0"
+	"propdata"		"actor_human"
+
+	"speed_walk"		"50"
+	"speed_run"		"200"
+}
