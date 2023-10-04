@@ -1,0 +1,7 @@
+entityDef decore_goldskull
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/goldskull.mdl"
+	"mins"			"-10 -10 0"
+	"maxs"			"10 10 24"
+}

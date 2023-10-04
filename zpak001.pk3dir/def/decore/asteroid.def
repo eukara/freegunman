@@ -1,0 +1,18 @@
+entityDef decore_asteroid
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/rockspin.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 40"
+	"rotate"		"1"
+
+	when "asteroidsize" equals "1"
+	{
+		"body"	"2"
+	}
+
+	when "asteroidsize" equals "2"
+	{
+		"body"	"3"
+	}
+}

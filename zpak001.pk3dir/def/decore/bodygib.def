@@ -1,0 +1,8 @@
+entityDef decore_bodygib
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/bodygib.mdl"
+	"mins"			"-32 -32 0"
+	"maxs"			"32 32 12"
+	"droptofloor"	"1"
+}

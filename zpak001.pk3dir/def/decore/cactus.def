@@ -1,0 +1,11 @@
+entityDef decore_cactus
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/cactus.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 80"
+	"droptofloor"	"1"
+	"solid"			"1"
+	"damage"		"1"
+	"dmgtime"		"1"
+}

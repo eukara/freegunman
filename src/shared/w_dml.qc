@@ -425,15 +425,6 @@ weapon_t w_dml =
 	.hudpic		= w_dml_hudpic
 };
 
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_dml(void)
-{
-	Weapons_InitItem(WEAPON_DML);
-}
-#endif
-
 #ifdef CLIENT
 int
 w_dml_hudforward(player pl)

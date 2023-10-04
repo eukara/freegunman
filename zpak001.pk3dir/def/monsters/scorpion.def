@@ -9,6 +9,7 @@ entityDef monster_scorpion
 	"eye_height"		"16"
 	"team"			"2"
 	"propdata"		"actor_alien"
+	"team"				"$ALLIANCE_REPTILES"
 
 	"speed_walk"		"0"
 	"speed_run"		"0"

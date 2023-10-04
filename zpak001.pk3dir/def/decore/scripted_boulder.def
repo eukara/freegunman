@@ -1,0 +1,8 @@
+entityDef decore_scripted_boulder
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/boulder.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 16"
+	"solid"			"1"
+}

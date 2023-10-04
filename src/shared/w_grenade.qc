@@ -238,15 +238,6 @@ weapon_t w_grenade =
 	.hudpic		= w_grenade_hudpic
 };
 
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_grenade(void)
-{
-	Weapons_InitItem(WEAPON_GRENADE);
-}
-#endif
-
 #ifdef CLIENT
 int
 w_grenade_hudforward(player pl)

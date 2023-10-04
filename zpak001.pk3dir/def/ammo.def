@@ -1,0 +1,7 @@
+include "ammo/beamgunclip.def"
+include "ammo/buckshot.def"
+include "ammo/dmlclip.def"
+include "ammo/dmlsingle.def"
+include "ammo/gaussclip.def"
+include "ammo/minigunclip.def"
+include "ammo/chemical.def"

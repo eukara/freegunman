@@ -9,6 +9,7 @@ entityDef monster_ourano
 	"eye_height"		"64"
 	"team"			"0"
 	"propdata"		"actor_human"
+	"team"				"$ALLIANCE_NEUTRAL"
 
 	"speed_walk"		"50"
 	"speed_run"		"200"

@@ -9,6 +9,7 @@ entityDef monster_endboss
 	"eye_height"		"64"
 	"team"			"0"
 	"propdata"		"actor_robot"
+	"team"			"$ALLIANCE_BANDITS"
 
 	"speed_walk"		"50"
 	"speed_run"		"200"

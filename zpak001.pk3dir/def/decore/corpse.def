@@ -1,0 +1,7 @@
+entityDef decore_corpse
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/error.vvm"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 16"
+}

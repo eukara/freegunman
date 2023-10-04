@@ -439,15 +439,6 @@ weapon_t w_gausspistol =
 	.hudpic		= w_gausspistol_hudpic
 };
 
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_gausspistol(void)
-{
-	Weapons_InitItem(WEAPON_GAUSSPISTOL);
-}
-#endif
-
 #ifdef CLIENT
 int
 w_gausspistol_hudforward(player pl)

@@ -1,0 +1,19 @@
+entityDef weapon_chemicalgun
+{
+	"editor_color"		".3 .3 1"
+	"editor_mins"		"-16 -16 -16"
+	"editor_maxs"		"16 16 16"
+	"editor_usage"		"Chemical Gun"
+	"editor_rotatable"	"1"
+
+	"spawnclass"		"NSItem"
+	"model"				"models/w_chemgun.mdl"
+	"inv_item"			"$WEAPON_CHEMICALGUN"
+	"snd_acquire"		"weapon.pickup"
+	"snd_respawn"		"item.respawn"
+}
+
+entityDef weapon_SPchemicalgun
+{
+	spawnclass weapon_chemicalgun
+}

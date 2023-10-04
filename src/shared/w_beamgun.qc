@@ -274,15 +274,6 @@ weapon_t w_beamgun =
 	.hudpic		= w_beamgun_hudpic
 };
 
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_beamgun(void)
-{
-	Weapons_InitItem(WEAPON_BEAMGUN);
-}
-#endif
-
 #ifdef CLIENT
 int
 w_beamgun_hudforward(player pl)

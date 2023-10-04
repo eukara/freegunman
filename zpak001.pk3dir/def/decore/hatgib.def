@@ -1,0 +1,8 @@
+entityDef decore_hatgib
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/hatgib.mdl"
+	"mins"			"-10 -10 0"
+	"maxs"			"10 10 12"
+	"droptofloor"	"1"
+}

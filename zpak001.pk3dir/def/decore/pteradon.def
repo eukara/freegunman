@@ -1,0 +1,7 @@
+entityDef decore_pteradon
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/pteradon2.mdl"
+	"mins"			"-32 -32 -16"
+	"maxs"			"32 32 16"
+}

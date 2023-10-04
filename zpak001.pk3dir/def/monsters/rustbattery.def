@@ -1,7 +1,7 @@
 entityDef monster_rustbattery
 {
 	"spawnclass"		"NSMonster"
-	"model"			"models/rustbattery.mdl"
+	"model"			"models/battbot.mdl"
 	"netname"		"Tank"
 	"health"		"skill:rustbattery_health"
 	"mins"			"-16 -16 0"
@@ -9,6 +9,7 @@ entityDef monster_rustbattery
 	"eye_height"		"64"
 	"team"			"0"
 	"propdata"		"actor_robot"
+	"team"				"$ALLIANCE_ROBOT"
 
 	"speed_walk"		"0"
 	"speed_run"		"0"

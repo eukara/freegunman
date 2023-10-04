@@ -1,9 +1,0 @@
-entityDef monster_human_scientist
-{
-	"spawnclass"	"NSTalkMonster"
-	"inherit"	"monster_scientist"
-	"netname"	"Human Scientist"
-	"model"		"models/scientist.mdl"
-	"health"	"skill:scientist_health"
-
-}

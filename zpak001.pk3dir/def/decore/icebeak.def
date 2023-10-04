@@ -1,0 +1,9 @@
+entityDef decore_icebeak
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/icebeak.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 40"
+	"droptofloor"	"1"
+	"solid"			"1"
+}

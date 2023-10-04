@@ -9,6 +9,7 @@ entityDef monster_rustflier
 	"eye_height"		"64"
 	"team"			"0"
 	"propdata"		"actor_robot"
+	"team"				"$ALLIANCE_ROBOT"
 
 	"speed_walk"		"0"
 	"speed_run"		"0"

@@ -1,0 +1,3 @@
+include "items/armor.def"
+include "items/gascan.def"
+include "items/healthkit.def"

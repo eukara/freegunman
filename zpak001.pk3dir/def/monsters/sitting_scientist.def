@@ -5,5 +5,6 @@ entityDef monster_sitting_scientist
 	"netname"	"Human Scientist Seated"
 	"model"		"models/scientist.mdl"
 	"health"	"skill:scientist_health"
+	"team"				"$ALLIANCE_FRIENDLY"
 
 }

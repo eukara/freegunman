@@ -1,0 +1,7 @@
+entityDef decore_butterflyflock
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/butterfly.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 16"
+}

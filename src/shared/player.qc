@@ -80,6 +80,8 @@ class player:NSClientPlayer
 #ifdef SERVER
 	virtual void(void) EvaluateEntity;
 	virtual float(entity, float) SendEntity;
+	virtual void Save(float);
+	virtual void Restore(string,string);
 #endif
 };
 
@@ -362,6 +364,154 @@ player::PredictPostFrame(void)
 }
 
 #else
+void
+player::Save(float handle)
+{
+	super::Save(handle);
+
+	SaveInt(handle, "anim_top", anim_top);
+	SaveFloat(handle, "anim_top_time", anim_top_time);
+	SaveFloat(handle, "anim_top_delay", anim_top_delay);
+	SaveInt(handle, "anim_bottom", anim_bottom);
+	SaveFloat(handle, "anim_bottom_time", anim_bottom_time);
+
+	SaveInt(handle, "ammo_battery", ammo_battery); /* beamgun */
+	SaveInt(handle, "ammo_chem", ammo_chem); /* chemicalgun */
+	SaveInt(handle, "ammo_rocket", ammo_rocket); /* dml / grenades */
+	SaveInt(handle, "ammo_gauss", ammo_gauss); /* gauspistol */
+	SaveInt(handle, "ammo_minigun", ammo_minigun); /* minigun */
+	SaveInt(handle, "ammo_buckshot", ammo_buckshot); /* shotgun */
+
+	SaveInt(handle, "fist_mode", fist_mode); /* knife/fists */
+	SaveInt(handle, "gauss_mode", gauss_mode);
+	SaveInt(handle, "shotgun_shells", shotgun_shells);
+	SaveInt(handle, "shotgun_spread", shotgun_spread);
+	
+	SaveInt(handle, "dml_launch", dml_launch); /* when fired, when targeted */
+	SaveInt(handle, "dml_flightpath", dml_flightpath); /* guided, homing, spiral */
+	SaveInt(handle, "dml_detonate", dml_detonate); /* on impact, in proximity, timed, when tripped */
+	SaveInt(handle, "dml_payload", dml_payload); /* explosive, cluster */
+	SaveInt(handle, "chem_acid", chem_acid);
+	SaveInt(handle, "chem_neutral", chem_neutral);
+	SaveInt(handle, "chem_base", chem_base);
+	SaveInt(handle, "chem_pressure", chem_pressure);
+
+	SaveInt(handle, "beam_range", beam_range); /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
+	SaveInt(handle, "beam_poweracc", beam_poweracc); /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
+	SaveInt(handle, "beam_lightning", beam_lightning); /* BEAM, CHAIN, BALL */
+	SaveInt(handle, "gren_detonate", gren_detonate); /* when tripped (tripmine);, timed, on impact */
+	SaveInt(handle, "gren_payload", gren_payload); /* cluster, explosive */
+
+	SaveInt(handle, "menu_active", menu_active);
+	SaveInt(handle, "dml_state", dml_state);
+}
+
+void
+player::Restore(string strKey, string strValue)
+{
+	switch (strKey) {
+	case "anim_top":
+		anim_top = ReadInt(strValue);
+		break;
+	case "anim_top_time":
+		anim_top_time = ReadFloat(strValue);
+		break;
+	case "anim_top_delay":
+		anim_top_delay = ReadFloat(strValue);
+		break;
+	case "anim_bottom":
+		anim_bottom = ReadInt(strValue);
+		break;
+	case "anim_bottom_time":
+		anim_bottom_time = ReadFloat(strValue);
+		break;
+
+	/* AMMO 1 */
+	case "ammo_battery":
+		ammo_battery = ReadInt(strValue); /* beamgun */
+		break;
+	case "ammo_chem":
+		ammo_chem = ReadInt(strValue); /* chemicalgun */
+		break;
+	case "ammo_rocket":
+		ammo_rocket = ReadInt(strValue); /* dml / grenades */
+		break;
+	case "ammo_gauss":
+		ammo_gauss = ReadInt(strValue); /* gauspistol */
+		break;
+	case "ammo_minigun":
+		ammo_minigun = ReadInt(strValue); /* minigun */
+		break;
+	case "ammo_buckshot":
+		ammo_buckshot = ReadInt(strValue); /* shotgun */
+		break;
+
+	case "fist_mode":
+		fist_mode = ReadInt(strValue); /* knife/fists */
+		break;
+	case "gauss_mode":
+		gauss_mode = ReadInt(strValue);
+		break;
+	case "shotgun_shells":
+		shotgun_shells = ReadInt(strValue);
+		break;
+	case "shotgun_spread":
+		shotgun_spread = ReadInt(strValue);
+		break;
+	
+	case "dml_launch":
+		dml_launch = ReadInt(strValue); /* when fired, when targeted */
+		break;
+	case "dml_flightpath":
+		dml_flightpath = ReadInt(strValue); /* guided, homing, spiral */
+		break;
+	case "dml_detonate":
+		dml_detonate = ReadInt(strValue); /* on impact, in proximity, timed, when tripped */
+		break;
+	case "dml_payload":
+		dml_payload = ReadInt(strValue); /* explosive, cluster */
+		break;
+	case "chem_acid":
+		chem_acid = ReadInt(strValue);
+		break;
+	case "chem_neutral":
+		chem_neutral = ReadInt(strValue);
+		break;
+	case "chem_base":
+		chem_base = ReadInt(strValue);
+		break;
+	case "chem_pressure":
+		chem_pressure = ReadInt(strValue);
+		break;
+
+	case "beam_range":
+		beam_range = ReadInt(strValue); /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
+		break;
+	case "beam_poweracc":
+		beam_poweracc = ReadInt(strValue); /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
+		break;
+	case "beam_lightning":
+		beam_lightning = ReadInt(strValue); /* BEAM, CHAIN, BALL */
+		break;
+	case "gren_detonate":
+		gren_detonate = ReadInt(strValue); /* when tripped (tripmine = ReadInt(strValue);, timed, on impact */
+		break;
+	case "gren_payload":
+		gren_payload = ReadInt(strValue); /* cluster, explosive */
+		break;
+
+	case "menu_active":
+		menu_active = ReadInt(strValue);
+		break;
+	case "dml_state":
+		dml_state = ReadInt(strValue);
+		break;
+
+	default:
+		super::Restore(strKey, strValue);
+	}
+}
+
 void
 player::EvaluateEntity(void)
 {

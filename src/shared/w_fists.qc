@@ -316,12 +316,3 @@ weapon_t w_fists =
 	.type		= gunman_wpntype_close,
 	.hudpic		= w_fists_hudpic
 };
-
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_fists(void)
-{
-	Weapons_InitItem(WEAPON_FISTS);
-}
-#endif

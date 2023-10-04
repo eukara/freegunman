@@ -1,0 +1,12 @@
+entityDef decore_torchflame
+{
+	"spawnclass"	"env_sprite"
+	"model"			"sprites/flames.spr"
+	"mins"			"-4 -4 -8"
+	"maxs"			"4 4 16"
+	"maxframe"		"22"
+	"framerate"		"10"
+	"rendermode"	"$RM_ADDITIVE"
+	"rendercolor"	"255 255 255"
+	"renderamt"		"255"
+}

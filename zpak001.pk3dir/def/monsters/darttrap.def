@@ -1,7 +1,7 @@
 entityDef monster_darttrap
 {
-	"spawnclass"		"NSMonster"
-	"model"			"models/null.mdl"
+	"spawnclass"	"NSMonster"
+	"model"			"models/monika.mdl"
 	"netname"		"Dart Trap"
 	"health"		"skill:darttrap_health"
 	"mins"			"-16 -16 0"
@@ -9,6 +9,7 @@ entityDef monster_darttrap
 	"eye_height"		"64"
 	"team"			"0"
 	"propdata"		"actor_robot"
+	"team"			"ALLIANCE_ENEMY"
 
 	"speed_walk"		"50"
 	"speed_run"		"200"

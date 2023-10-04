@@ -1,0 +1,9 @@
+entityDef decore_aicore
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/w_aicore.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 40"
+	"rotate"	"1"
+
+}

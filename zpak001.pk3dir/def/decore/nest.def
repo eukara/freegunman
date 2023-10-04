@@ -1,0 +1,8 @@
+entityDef decore_nest
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/ornest.mdl"
+	"mins"			"-16 -16 0"
+	"maxs"			"16 16 16"
+	"droptofloor"	"1"
+}

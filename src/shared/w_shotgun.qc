@@ -340,15 +340,6 @@ weapon_t w_shotgun =
 	.hudpic		= w_shotgun_hudpic
 };
 
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_shotgun(void)
-{
-	Weapons_InitItem(WEAPON_SHOTGUN);
-}
-#endif
-
 #ifdef CLIENT
 int
 w_shotgun_hudforward(player pl)

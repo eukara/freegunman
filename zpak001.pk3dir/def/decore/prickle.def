@@ -1,0 +1,8 @@
+entityDef decore_prickle
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/prickle.mdl"
+	"mins"			"-8 -8 0"
+	"maxs"			"8 8 8"
+	"droptofloor"	"1"
+}

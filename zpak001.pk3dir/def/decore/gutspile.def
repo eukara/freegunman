@@ -1,0 +1,8 @@
+entityDef decore_gutspile
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/gutspile.mdl"
+	"mins"			"-32 -32 0"
+	"maxs"			"32 32 32"
+	"droptofloor"	"1"
+}

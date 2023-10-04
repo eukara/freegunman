@@ -1,15 +1,16 @@
 entityDef monster_gunner_friendly
 {
 	"spawnclass"		"NSTalkMonster"
-	"model"			"models/aigunner.mdl"
-	"netname"		"Gunner Friendly"
-	"health"		"skill:gunner_health"
-	"mins"			"-16 -16 0"
-	"maxs"			"16 16 72"
+	"model"				"models/aigunner.mdl"
+	"netname"			"Gunner Friendly"
+	"health"			"skill:gunner_health"
+	"mins"				"-16 -16 0"
+	"maxs"				"16 16 72"
 	"eye_height"		"64"
-	"team"			"0"
-	"propdata"		"actor_robot"
+	"team"				"0"
+	"propdata"			"actor_robot"
+	"team"				"$ALLIANCE_FRIENDLY"
 
 	"speed_walk"		"50"
-	"speed_run"		"200"
+	"speed_run"			"200"
 }

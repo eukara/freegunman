@@ -58,6 +58,36 @@ HLGameRules::LevelDecodeParms(NSClientPlayer pp)
 	pl.rpg_mag = parm29;
 	pl.satchel_chg = parm30;*/
 
+	pl.ammo_battery = parm12; /* beamgun */
+	pl.ammo_chem = parm13; /* chemicalgun */
+	pl.ammo_rocket = parm14; /* dml / grenades */
+	pl.ammo_gauss = parm15; /* gauspistol */
+	pl.ammo_minigun = parm16; /* minigun */
+	pl.ammo_buckshot = parm17; /* shotgun */
+
+	pl.fist_mode = parm18; /* knife/fists */
+	pl.gauss_mode = parm19;
+	pl.shotgun_shells = parm20;
+	pl.shotgun_spread = parm21;
+	
+	pl.dml_launch = parm22; /* when fired, when targeted */
+	pl.dml_flightpath = parm23; /* guided, homing, spiral */
+	pl.dml_detonate = parm24; /* on impact, in proximity, timed, when tripped */
+	pl.dml_payload = parm25; /* explosive, cluster */
+	pl.chem_acid = parm26;
+	pl.chem_neutral = parm27;
+	pl.chem_base = parm28;
+	pl.chem_pressure = parm29;
+
+	pl.beam_range = parm30; /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
+	pl.beam_poweracc = parm31; /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
+	pl.beam_lightning = parm32; /* BEAM, CHAIN, BALL */
+	pl.gren_detonate = parm33; /* when tripped (tripmine = parm24;, timed, on impact */
+	pl.gren_payload = parm34; /* cluster, explosive */
+
+	pl.menu_active = parm35;
+	pl.dml_state = parm36;
+
 	if (pl.flags & FL_CROUCHING) {
 		setsize(pl, VEC_CHULL_MIN, VEC_CHULL_MAX);
 	} else {
@@ -81,25 +111,36 @@ HLGameRules::LevelChangeParms(NSClientPlayer pp)
 	parm64 = pl.flags;
 	parm10 = pl.g_items;
 	parm11 = pl.activeweapon;
-	/*parm12 = pl.ammo_9mm;
-	parm13 = pl.ammo_357;
-	parm14 = pl.ammo_buckshot;
-	parm15 = pl.ammo_m203_grenade;
-	parm16 = pl.ammo_bolt;
-	parm17 = pl.ammo_rocket;
-	parm18 = pl.ammo_uranium;
-	parm19 = pl.ammo_handgrenade;
-	parm20 = pl.ammo_satchel;
-	parm21 = pl.ammo_tripmine;
-	parm22 = pl.ammo_snark;
-	parm23 = pl.ammo_hornet;
-	parm24 = pl.glock_mag;
-	parm25 = pl.mp5_mag;
-	parm26 = pl.python_mag;
-	parm27 = pl.shotgun_mag;
-	parm28 = pl.crossbow_mag;
-	parm29 = pl.rpg_mag;
-	parm30 = pl.satchel_chg;*/
+
+	parm12 = pl.ammo_battery; /* beamgun */
+	parm13 = pl.ammo_chem; /* chemicalgun */
+	parm14 = pl.ammo_rocket; /* dml / grenades */
+	parm15 = pl.ammo_gauss; /* gauspistol */
+	parm16 = pl.ammo_minigun; /* minigun */
+	parm17 = pl.ammo_buckshot; /* shotgun */
+
+	parm18 = pl.fist_mode; /* knife/fists */
+	parm19 = pl.gauss_mode;
+	parm20 = pl.shotgun_shells;
+	parm21 = pl.shotgun_spread;
+	
+	parm22 = pl.dml_launch; /* when fired, when targeted */
+	parm23 = pl.dml_flightpath; /* guided, homing, spiral */
+	parm24 = pl.dml_detonate; /* on impact, in proximity, timed, when tripped */
+	parm25 = pl.dml_payload; /* explosive, cluster */
+	parm26 = pl.chem_acid;
+	parm27 = pl.chem_neutral;
+	parm28 = pl.chem_base;
+	parm29 = pl.chem_pressure;
+
+	parm30 = pl.beam_range; /* TOUCH TAZER, SHORT TAZER, MEDIUM BEAM, LONG BEAM */
+	parm31 = pl.beam_poweracc; /* LOW HIGHEST, MEDIUM HIGH, HIGH MEDIUM, HIGHEST LOW */
+	parm32 = pl.beam_lightning; /* BEAM, CHAIN, BALL */
+	parm33 = pl.gren_detonate; /* when tripped (tripmine;, timed, on impact */
+	parm34 = pl.gren_payload; /* cluster, explosive */
+
+	parm35 = pl.menu_active;
+	parm36 = pl.dml_state;
 }
 
 void

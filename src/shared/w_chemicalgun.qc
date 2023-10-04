@@ -375,15 +375,6 @@ weapon_t w_chemicalgun =
 	.hudpic		= w_chemicalgun_hudpic
 };
 
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_SPchemicalgun(void)
-{
-	Weapons_InitItem(WEAPON_CHEMICALGUN);
-}
-#endif
-
 #ifdef CLIENT
 int
 w_chemgun_hudforward(player pl)

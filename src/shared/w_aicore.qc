@@ -44,10 +44,22 @@ w_aicore_primary(player pl)
 	}
 
 	src = Weapons_GetCameraPos(pl);
+	makevectors(pl.v_angle);
 
-#ifdef CLIENT
-	//Weapons_ViewAnimation(pl, GP_FIRESINGLE);
+	traceline(src, src + v_forward * 96, MOVE_NORMAL, pl);
+
+	if (trace_fraction < 1.0f) {
+		if (trace_ent.classname == "button_aiwallplug") {
+#ifdef SERVER
+			NSEntity wallPlug = (NSEntity)trace_ent;
+			wallPlug.Trigger(pl, TRIG_TOGGLE);
 #endif
+			Weapons_ViewAnimation(pl, AIC_PLUGIN);
+			pl.w_attack_next = 5.0;
+			pl.w_idle_next = 10.0f;
+			return;
+		}
+	}
 
 	pl.w_attack_next = 0.15f;
 	pl.w_idle_next = 2.5f;
@@ -142,12 +154,3 @@ weapon_t w_aicore =
 	.type		= gunman_wpntype_close,
 	.hudpic		= w_aicore_hudpic
 };
-
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_aicore(void)
-{
-	Weapons_InitItem(WEAPON_AICORE);
-}
-#endif

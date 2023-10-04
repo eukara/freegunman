@@ -267,12 +267,3 @@ weapon_t w_minigun =
 	.type		= gunman_wpntype_ranged,
 	.hudpic		= w_minigun_hudpic
 };
-
-/* entity definitions for pickups */
-#ifdef SERVER
-void
-weapon_minigun(void)
-{
-	Weapons_InitItem(WEAPON_MINIGUN);
-}
-#endif

@@ -1,0 +1,8 @@
+entityDef decore_mushroom2
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/mushroom2.mdl"
+	"mins"			"-8 -8 -16"
+	"maxs"			"8 8 16"
+	"solid"			"1"
+}

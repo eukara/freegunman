@@ -23,36 +23,11 @@ gunman_cycler.qc
 hologram_damage.qc
 
 decore.qc
-decore_asteroid.qc
-decore_baboon.qc
-decore_bodygib.qc
-decore_cactus.qc
-decore_cam.qc
-decore_camflare.qc
-decore_eagle.qc
-decore_explodable.qc
-decore_foot.qc
-decore_goldskull.qc
-decore_gutspile.qc
-decore_hatgib.qc
-decore_ice.qc
-decore_icebeak.qc
-decore_labstuff.qc
-decore_mushroom.qc
-decore_mushroom2.qc
-decore_nest.qc
-decore_pipes.qc
-decore_prickle.qc
-decore_pteradon.qc
-decore_sittingtubemortar.qc
-decore_sack.qc
-decore_swampplants.qc
-decore_torchflame.qc
-decore_torch.qc
 
 entity_spritegod.qc
 sphere_explosion.qc
 player_giveitems.qc
+button_aiwallplug.qc
 
 ../../../valve/src/server/player.qc
 
@@ -63,6 +38,7 @@ player_giveitems.qc
 gamerules.qc
 gamerules_singleplayer.qc
 gamerules_multiplayer.qc
+
 
 ../../../valve/src/server/server.qc
 ../../../valve/src/server/damage.qc

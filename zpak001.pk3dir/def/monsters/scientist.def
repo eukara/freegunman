@@ -7,7 +7,7 @@ entityDef monster_human_scientist
 	"mins"			"-16 -16 0"
 	"maxs"			"16 16 72"
 	"eye_height"		"64"
-	"team"			"1"
+	"team"				"$ALLIANCE_FRIENDLY"
 	"propdata"		"actor_human"
 	
 	// When body equals 0, this is our default Scientist.
@@ -70,4 +70,9 @@ entityDef monster_human_scientist
 		"talk_player_idle"	"!SC_PIDLE"
 		"follow_on_use"		"0"
 	}
+}
+
+entityDef monster_scientist
+{
+	"spawnclass" "monster_human_scientist"
 }

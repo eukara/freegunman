@@ -1,0 +1,7 @@
+entityDef decore_torch
+{
+	"spawnclass"	"RWDecore"
+	"model"			"models/torch.mdl"
+	"mins"			"-8 -8 -8"
+	"maxs"			"8 8 16"
+}
