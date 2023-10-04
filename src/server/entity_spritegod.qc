@@ -63,7 +63,7 @@ entity_spritegod::entity_spritegod(void)
 	m_strSprite = __NULL__;
 	m_iNoise = 50;
 	m_flSpeed = 100;
-	m_bState = true;
+	m_bState = false;
 	m_iCount = 1;
 	m_iFrequency = 5;
 	m_vecDirection = [0,0,0];
