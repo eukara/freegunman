@@ -1,7 +1,7 @@
 entityDef decore_spacedebris
 {
 	"spawnclass"	"RWDecore"
-	"model"			"models/spacedebris.mdl"
+	"model"			"models/decoregibs.mdl"
 	"mins"			"-16 -16 0"
 	"maxs"			"16 16 16"
 	"solid"			"1"
