@@ -24,6 +24,7 @@ hologram_damage.qc
 
 decore.qc
 
+entity_digitgod.qc
 entity_spritegod.qc
 sphere_explosion.qc
 player_giveitems.qc

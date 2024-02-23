@@ -1,0 +1,28 @@
+{
+	name Bandit
+	model bandit
+}
+{
+	name General
+	model general
+}
+{
+	name Scientist
+	model scientist
+}
+{
+	name Soldier
+	model soldier
+}
+{
+	name Mainframe
+	model soldier
+}
+{
+	name Gator
+	model scientist
+}
+{
+	name Xenome
+	model bandit
+}
