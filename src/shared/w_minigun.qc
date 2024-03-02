@@ -98,14 +98,14 @@ w_minigun_primary(player pl)
 	if (pl.menu_active == 1) {
 		Weapons_ViewAnimation(pl, MG_FIRELOOP);
 #ifdef SERVER
-		TraceAttack_FireBullets(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.1,0.1], WEAPON_MINIGUN);
+		TraceAttack_FireBulletsWithDecal(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.1,0.1], WEAPON_MINIGUN, "Impact.BigShot");
 #endif
 		pl.w_attack_next = 0.1f;
 		pl.w_idle_next = 0.1f;
 	} else {
 		Weapons_ViewAnimation(pl, MG_FIRE);
 #ifdef SERVER
-		TraceAttack_FireBullets(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.05,0.05], WEAPON_MINIGUN);
+		TraceAttack_FireBulletsWithDecal(1, src, Skill_GetValue("sk_9mmAR_bullet", 10), [0.05,0.05], WEAPON_MINIGUN, "Impact.BigShot");
 #endif
 		pl.w_attack_next = 0.25f;
 		pl.w_idle_next = 2.5f;
@@ -120,9 +120,9 @@ w_minigun_secondary(player pl)
 
 #ifdef SERVER
 	if (pl.menu_active == 0) {
-		Sound_Play(pl, 8, "weapon_minigun.spinup");
+		//Sound_Play(pl, 8, "weapon_minigun.spinup");
 	} else {
-		Sound_Play(pl, 8, "weapon_minigun.spindown");
+		//Sound_Play(pl, 8, "weapon_minigun.spindown");
 	}
 #endif
 

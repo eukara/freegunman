@@ -106,7 +106,7 @@ w_shotgun_primary(player pl)
 
 	pellets = pl.shotgun_shells * 4;
 
-	TraceAttack_FireBullets(pellets, src, 5, spread, WEAPON_SHOTGUN);
+	TraceAttack_FireBulletsWithDecal(pellets, src, 5, spread, WEAPON_SHOTGUN, "Impact.BigShot");
 	Sound_Play(pl, CHAN_WEAPON, "weapon_shotgun.fire");
 #else
 	View_SetMuzzleflash(MUZZLE_SMALL);

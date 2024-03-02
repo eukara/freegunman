@@ -116,8 +116,7 @@ HLMultiplayerRules::PlayerDeath(NSClientPlayer pl)
 	pl.gflags &= ~GF_EGONBEAM;
 	pl.armor = pl.activeweapon = pl.g_items = 0;
 	pl.health = 0;
-
-	Sound_Play(pl, CHAN_AUTO, "player.die");
+	pl.StartSoundDef("Player.Death", CHAN_AUTO, true);
 
 	/* force respawn */
 	pl.think = PutClientInServer;

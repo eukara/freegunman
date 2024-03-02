@@ -285,7 +285,7 @@ w_dml_hud(player pl)
 		"CLUSTER"
 	};
 	vector pos;
-	vector jitter;
+	vector jitter = g_vec_null;
 	float lerp;
 	
 	/* laser */

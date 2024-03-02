@@ -1,0 +1,8 @@
+entityDef hologram_beak
+{
+	"spawnclass"	"hologram_damage"
+	"editor_model"	"models/beak.mdl"
+	"editor_mins"	"-16 -16 0"
+	"editor_maxs"	"16 16 72"
+	"creaturetype"	"0"
+}

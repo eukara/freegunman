@@ -143,9 +143,23 @@ w_fists_release(player pl)
 void
 w_fists_primary(player pl)
 {
+	vector src;
+	int finalDamage = 0i;
+
 	if (pl.w_attack_next) {
 		return;
 	}
+
+	Weapons_MakeVectors(pl);
+	src = pl.origin + pl.view_ofs;
+
+#ifdef SERVER
+	/* make sure we can gib corpses */
+	int oldhitcontents = pl.hitcontentsmaski;
+	pl.hitcontentsmaski = CONTENTBITS_POINTSOLID | CONTENTBIT_CORPSE;
+	traceline(src, src + (v_forward * 32), FALSE, pl);
+	pl.hitcontentsmaski = oldhitcontents;
+#endif
 
 	pl.a_ammo1 = 1 - pl.a_ammo1;
 
@@ -153,24 +167,16 @@ w_fists_primary(player pl)
 		#ifdef SERVER
 		Sound_Play(pl, 8, "weapon_fists.missknife");
 		#endif
+
 		if (pl.a_ammo1 == 1) {
 			Weapons_ViewAnimation(pl, KNIFE_ATTACK1);
 		} else {
 			Weapons_ViewAnimation(pl, KNIFE_ATTACK2);
 		}
-
-#ifdef SERVER
-		traceline(Weapons_GetCameraPos(pl), Weapons_GetCameraPos(pl) + (v_forward * 96),\
-			FALSE, pl);
-		if (trace_ent && trace_fraction <= 1.0) {
-			if (trace_ent.takedamage == DAMAGE_YES) {
-				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_knife1_d", 25), WEAPON_GAUSSPISTOL, DMG_GENERIC);
-			}
-		}
-#endif
-
+		#ifdef SERVER
+		finalDamage = (int)Skill_GetValue("knife1_d", 25);
+		#endif
 		pl.w_attack_next = 0.5f;
-		pl.w_idle_next = pl.w_attack_next;
 	} else {
 		if (pl.a_ammo1 == 1) {
 			Weapons_ViewAnimation(pl, FISTS_RIGHT);
@@ -183,20 +189,29 @@ w_fists_primary(player pl)
 			Sound_Play(pl, CHAN_WEAPON, "weapon_fists.hitleft");
 			#endif
 		}
+		#ifdef SERVER
+		finalDamage = (int)Skill_GetValue("twohandpunch_d", 10);
+		#endif
+		pl.w_attack_next = 0.25f;
+	}
+	pl.w_idle_next = pl.w_attack_next;
 
 #ifdef SERVER
-		traceline(Weapons_GetCameraPos(pl), Weapons_GetCameraPos(pl) + (v_forward * 96),\
-			FALSE, pl);
-		if (trace_ent && trace_fraction <= 1.0) {
-			if (trace_ent.takedamage == DAMAGE_YES) {
-				Damage_Apply(trace_ent, pl, Skill_GetValue("sk_twohandpunch_d", 10), WEAPON_GAUSSPISTOL, DMG_GENERIC);
-			}
-		}
-#endif
-
-		pl.w_attack_next = 0.25f;
-		pl.w_idle_next = pl.w_attack_next;
+	if (trace_fraction >= 1.0) {
+		return;
 	}
+
+	/* don't bother with decals, we got squibs */
+	if (trace_ent.iBleeds) {
+		FX_Blood(trace_endpos, [1,0,0]);
+	}
+
+	if (trace_ent.takedamage) {
+		Damage_Apply(trace_ent, pl, finalDamage, WEAPON_FISTS, DMG_BLUNT);
+	} else {
+		DecalGroups_Place("Impact.Shot", trace_endpos + (v_forward * -2));
+	}
+#endif
 }
 
 void
